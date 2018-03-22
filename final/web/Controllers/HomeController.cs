@@ -22,8 +22,14 @@ namespace web.Controllers
             return View();
         }
 
-        [Route("home/contact")]
+        [HttpGet("contact")]
         public IActionResult Contact()
+        {
+            return View();
+        }
+        
+        [HttpPost("contact")]
+        public IActionResult Contact(Object model)
         {
             return View();
         }

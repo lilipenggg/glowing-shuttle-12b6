@@ -1,14 +1,22 @@
-﻿@model TModel
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+﻿@{
+    ViewBag.Title = "Contact Us";
+}
+<form method="post">
+    <label>First Name: </label>
+    <br/>
+    <input name="name"/>
+    <label>Last Name: </label>
+    <br/>
+    <input/>
+    <label>Email: </label>
+    <br/>
+    <input type="email" name="email"/>
+    <label>Subject: </label>
+    <br/>
+    <input type="text" name="subject"/>
+    <label>Message: </label>
+    <br/>
+    <textarea rows="4"></textarea>
+    <br/>
+    <input type="submit" value="Send Message" name="message"/>
+</form>
