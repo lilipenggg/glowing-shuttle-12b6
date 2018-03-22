@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>Goodies Fair</title>
+    </head>
+
+    <body>
+        <h1>Welcome to Goodies Fair</h1>
+        <menu>
+            <ul>
+                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                <li><a asp-controller="Home" asp-action="About">About</a></li>
+            </ul>
+        </menu>
+
+        <section>
+        <h2>Selection</h2>
+            @RenderBody()
+        </section>
+
+        <footer>
+            Copyright 2018 Goodies Fair LLC
+        </footer>
+        
+    </body>
+</html>
