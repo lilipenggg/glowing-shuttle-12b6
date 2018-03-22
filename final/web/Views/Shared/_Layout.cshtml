@@ -1,31 +1,39 @@
 ﻿<!DOCTYPE html>
 <html>
-    <head>
-        <title>Goodies Fair: @ViewBag.Title</title>
-    </head>
+<head>
+    <title>Goodies Fair: @ViewBag.Title</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
 
-    <body>
-        <h1>Welcome to Goodies Fair</h1>
-        <menu>
-            <ul>
+<body>
+<div class="navbar navbar-inverse">
+    <header class="container">
+        <div class="navbar-header">
+            <div class="navbar-brand">Goodies Fair</div>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">&#9776;</button>
+        </div>
+        <div id="menu" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
                 <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                 <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
                 <li><a asp-controller="Home" asp-action="About">About</a></li>
             </ul>
-        </menu>
+        </div>
+    </header>
+</div>
 
-        <section>
-        <h2>@ViewBag.Title</h2>
-            @RenderBody()
-        </section>
+<section class="container">
+    <h2>@ViewBag.Title</h2>
+    @RenderBody()
+</section>
 
-        <footer>
-            Copyright 2018 Goodies Fair LLC
-        </footer>
-        
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/scss/bootstrap.scss"></script>
-    @RenderSection("scripts", false)
-        
-    </body>
+<footer class="container">
+    <div class="text-center">Copyright 2018 Goodies Fair LLC</div>
+</footer>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+@RenderSection("scripts", false)
+
+</body>
 </html>
