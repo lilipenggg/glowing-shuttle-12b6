@@ -1,10 +1,18 @@
-﻿{
+{
   "name": "asp.net",
+  "homepage": "https://github.com/lilipenggg/glowing-shuttle-12b6",
+  "authors": [
+    "Lili Peng"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
   "private": true,
-  "dependencies": {
-    "bootstrap": "3.3.7",
-    "jquery": "2.2.0",
-    "jquery-validation": "1.14.0",
-    "jquery-validation-unobtrusive": "3.2.6"
-  }
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }

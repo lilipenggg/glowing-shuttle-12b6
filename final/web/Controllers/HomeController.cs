@@ -32,6 +32,15 @@ namespace web.Controllers
         [HttpPost("contact")]
         public IActionResult Contact(ContactViewModel contactViewModel)
         {
+            if (ModelState.IsValid)
+            {
+                // Send the email
+            }
+            else
+            {
+                // Show the error
+            }
+            
             return View();
         }
     }
