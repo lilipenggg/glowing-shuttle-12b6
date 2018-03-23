@@ -1,0 +1,5 @@
+﻿{
+  "ConnectionStrings": {
+    "WebConnectionString": "server=(localdb)\\ProjectV13;Database=GoodiesFairDb;Integrated Security=true;MultipleActiveResultSets=true"
+  }
+}
