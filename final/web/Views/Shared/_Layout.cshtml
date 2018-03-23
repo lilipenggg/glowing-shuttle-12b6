@@ -3,13 +3,14 @@
 <head>
     <title>Goodies Fair: @ViewBag.Title</title>
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="~/lib/fontawesome/css/font-awesome.min.css" rel="stylesheet"/>
 </head>
 
 <body>
 <div class="navbar navbar-inverse">
     <header class="container">
         <div class="navbar-header">
-            <div class="navbar-brand">Goodies Fair</div>
+            <div class="navbar-brand"><i class="fa fa-shopping-bag"></i>    Goodies Fair</div>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">&#9776;</button>
         </div>
         <div id="menu" class="collapse navbar-collapse">
@@ -23,7 +24,7 @@
 </div>
 
 <section class="container">
-    <h2>@ViewBag.Title</h2>
+    <h2 class="text-center">@ViewBag.Title</h2>
     @RenderBody()
 </section>
 
