@@ -27,10 +27,12 @@ namespace web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            
+            services.AddDbContext<kioskContext>(options =>
                 {
-                    options.UseSqlServer(_config.GetConnectionString("WebConnectionString"));
+                    options.UseMySql(_config.GetConnectionString("WebConnectionString"));
                 });
+            
             
             services.AddTransient<IMailService, NullMailService>();
             // Support for real mail service
