@@ -1,27 +1,19 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using web.Data.Entities;
 
 namespace web.Data
 {
-    public partial class kioskContext : DbContext
+    public partial class KioskContext : DbContext
     {
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderItem> OrderItem { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<User> User { get; set; }
 
-        public kioskContext(DbContextOptions<kioskContext> options) : base(options)
+        public KioskContext(DbContextOptions<KioskContext> options) : base(options)
         {         
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySql("Server=165.227.2.81;Port=3306;Database=kiosk;user=localuser;Password=newPassw0rd!");
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

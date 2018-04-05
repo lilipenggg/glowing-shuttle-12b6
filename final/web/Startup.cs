@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -16,26 +17,28 @@ namespace web
 {
     public class Startup
     {
-        private readonly IConfiguration _config;
+        private IConfiguration Configuration;
 
-        public Startup(IConfiguration config)
+        public Startup()
         {
-            _config = config;
+            var configBuilder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", true, true);
+
+            Configuration = configBuilder.Build();
         }
         
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            
-            services.AddDbContext<kioskContext>(options =>
+            services.AddDbContext<KioskContext>(options =>
                 {
-                    options.UseMySql("Server=165.227.2.81;Port=3306;Database=kiosk;user=localuser;Password=newPassw0rd!");
+                    options.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
                 });
             
-            
-            services.AddTransient<IMailService, NullMailService>();
-            // Support for real mail service
+            services.AddTransient<IMailService, NullMailService>(); // Need to support for real mail service
+            services.AddScoped<IKioskRepository, KioskRepository>();
             
             services.AddMvc();
         }
@@ -52,7 +55,7 @@ namespace web
                 // Catch error and show the user a friendly error page
                 app.UseExceptionHandler("/error");
             }
-
+            
             app.UseMvc();
             app.UseStaticFiles();
 

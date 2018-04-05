@@ -10,7 +10,7 @@ using web.Data;
 
 namespace web.Migrations
 {
-    [DbContext(typeof(kioskContext))]
+    [DbContext(typeof(KioskContext))]
     [Migration("20180405012039_KioskDb")]
     partial class KioskDb
     {

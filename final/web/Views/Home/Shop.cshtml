@@ -1,10 +1,12 @@
-﻿@using web.Controllers
-@using web.Data
-@model IEnumerable<Product>
+﻿@model IEnumerable<Product>
 
 <h1>Shop</h1>
 <p>Count: @Model.Count()</p>
 @foreach (var p in Model)
 {
-    <li>@p.Name</li>
+    <div class="col-md-3">
+        <div class="well well-sm">
+            <h3>@p.</h3>
+        </div>
+    </div>
 }

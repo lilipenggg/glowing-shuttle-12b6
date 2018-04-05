@@ -14,12 +14,12 @@ namespace web.Controllers
     public class HomeController : Controller
     {
         private readonly IMailService _mailService;
-        private readonly kioskContext _context;
+        private readonly IKioskRepository _repository;
 
-        public HomeController(IMailService mailService, kioskContext context)
+        public HomeController(IMailService mailService, IKioskRepository repository)
         {
             _mailService = mailService;
-            _context = context;
+            _repository = repository;
         }
         
         [Route("home/index")]
@@ -62,10 +62,9 @@ namespace web.Controllers
         [Route("home/shop")]
         public IActionResult Shop()
         {
-            var results = _context.Product
-                .OrderBy(p => p.Name);
+            var results = _repository.GetAllProducts();
 
-            return View(results.ToList());
+            return View(results);
         }
     }
     

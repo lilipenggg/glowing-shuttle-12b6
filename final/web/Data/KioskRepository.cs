@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using web.Services;
+using web.Data.Entities;
 
 namespace web.Data
 {
     public class KioskRepository : IKioskRepository
     {
-        private readonly kioskContext _ctx;
+        private readonly KioskContext _ctx;
 
-        public KioskRepository(kioskContext ctx)
+        public KioskRepository(KioskContext ctx)
         {
             _ctx = ctx;
         }
@@ -18,6 +20,17 @@ namespace web.Data
                 .OrderBy(p => p.Name)
                 .ToList();
         }
-        
+
+        public IEnumerable<Order> GetAllOrders()
+        {
+            return _ctx.Order
+                .OrderBy(o => o.OrderDateTime)
+                .ToList();
+        }
+
+        public bool SaveAll()
+        {
+            return _ctx.SaveChanges() > 0;
+        }
     }
 }

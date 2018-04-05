@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace web.Data
+namespace web.Data.Entities
 {
     public partial class User
     {

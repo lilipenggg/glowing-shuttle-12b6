@@ -10,7 +10,7 @@ using web.Data;
 
 namespace web.Migrations
 {
-    [DbContext(typeof(kioskContext))]
+    [DbContext(typeof(KioskContext))]
     partial class kioskContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

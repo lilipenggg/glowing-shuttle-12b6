@@ -1,5 +1,0 @@
-﻿{
-  "ConnectionStrings": {
-    "WebConnectionString": "Server=165.227.2.81;Port=3306;Database=kiosk;user=localuser;Password=newPassw0rd!"
-  }
-}
