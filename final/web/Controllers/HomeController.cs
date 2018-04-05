@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using web.Data;
 using web.Services;
 using web.ViewModels;
 
@@ -13,10 +14,12 @@ namespace web.Controllers
     public class HomeController : Controller
     {
         private readonly IMailService _mailService;
+        private readonly kioskContext _context;
 
-        public HomeController(IMailService mailService)
+        public HomeController(IMailService mailService, kioskContext context)
         {
             _mailService = mailService;
+            _context = context;
         }
         
         [Route("home/index")]
@@ -54,6 +57,15 @@ namespace web.Controllers
             }
             
             return View();
+        }
+
+        [Route("home/shop")]
+        public IActionResult Shop()
+        {
+            var results = _context.Product
+                .OrderBy(p => p.Name);
+
+            return View(results.ToList());
         }
     }
     

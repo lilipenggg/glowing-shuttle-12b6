@@ -1,0 +1,10 @@
+﻿@using web.Controllers
+@using web.Data
+@model IEnumerable<Product>
+
+<h1>Shop</h1>
+<p>Count: @Model.Count()</p>
+@foreach (var p in Model)
+{
+    <li>@p.Name</li>
+}

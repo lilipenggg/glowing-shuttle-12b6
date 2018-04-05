@@ -14,7 +14,12 @@ namespace web
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            var host = new WebHostBuilder()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseStartup<Startup>()
+                .Build();
+            host.Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

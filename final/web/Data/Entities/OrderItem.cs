@@ -9,7 +9,7 @@ namespace web.Data
         public int Quantity { get; set; }
         public string OrderId { get; set; }
 
-        public Product IdNavigation { get; set; }
+        public Product Product { get; set; }
         public Order Order { get; set; }
     }
 }

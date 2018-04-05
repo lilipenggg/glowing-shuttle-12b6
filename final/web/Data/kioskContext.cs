@@ -11,12 +11,16 @@ namespace web.Data
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<User> User { get; set; }
 
+        public kioskContext(DbContextOptions<kioskContext> options) : base(options)
+        {         
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySql("Server=138.68.9.183;Port=3306;Database=kiosk;user=localuser;Password=newPassw0rd!");
+                optionsBuilder.UseMySql("Server=165.227.2.81;Port=3306;Database=kiosk;user=localuser;Password=newPassw0rd!");
             }
         }
 
@@ -71,7 +75,7 @@ namespace web.Data
 
                 entity.Property(e => e.Quantity).HasColumnType("int(11)");
 
-                entity.HasOne(d => d.IdNavigation)
+                entity.HasOne(d => d.Product)
                     .WithOne(p => p.OrderItem)
                     .HasForeignKey<OrderItem>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)

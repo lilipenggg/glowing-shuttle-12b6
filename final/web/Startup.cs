@@ -30,7 +30,7 @@ namespace web
             
             services.AddDbContext<kioskContext>(options =>
                 {
-                    options.UseMySql(_config.GetConnectionString("WebConnectionString"));
+                    options.UseMySql("Server=165.227.2.81;Port=3306;Database=kiosk;user=localuser;Password=newPassw0rd!");
                 });
             
             
