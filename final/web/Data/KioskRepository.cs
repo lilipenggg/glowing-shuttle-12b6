@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using web.Services;
 using web.Data.Entities;
 
@@ -14,23 +16,62 @@ namespace web.Data
             _ctx = ctx;
         }
 
-        public IEnumerable<Product> GetAllProducts()
+        #region Product
+        
+        public async Task<List<Product>> GetProducts()
         {
-            return _ctx.Product
-                .OrderBy(p => p.Name)
-                .ToList();
+            return await _ctx.Product.OrderBy(p => p.ProductName).ToListAsync();
         }
 
-        public IEnumerable<Order> GetAllOrders()
+        public async Task<Product> GetProductById(string id)
         {
-            return _ctx.Order
-                .OrderBy(o => o.OrderDateTime)
-                .ToList();
+            return await _ctx.Product.SingleOrDefaultAsync(p => p.ProductId == id);
         }
 
-        public bool SaveAll()
+        #endregion
+        
+        #region ShoppingCartItem
+
+        public async Task<List<ShoppingCartItem>> GetShoppingCartItems(string cartId)
         {
-            return _ctx.SaveChanges() > 0;
+            return await (from s in _ctx.ShoppingCartItem
+                where s.ShoppingCartId == cartId
+                select s).ToListAsync();
         }
+        
+        #endregion
+
+        #region Order
+        
+        public async Task<List<Order>> GetOrders()
+        {
+            return await (from o in _ctx.Order
+                orderby o.OrderId
+                select o).ToListAsync();
+        }
+
+        public async Task<Order> GetOrderById(string id)
+        {
+            return await _ctx.Order.SingleOrDefaultAsync(o => o.OrderId == id);
+        }
+
+        #endregion
+        
+        #region User
+
+        public async Task<List<User>> GetUsers()
+        {
+            return await (from u in _ctx.User
+                orderby u.UserId
+                select u).ToListAsync();
+        }
+
+        public async Task<User> GetUserById(string id)
+        {
+            return await _ctx.User.SingleOrDefaultAsync(u => u.UserId == id);
+        }
+        
+        #endregion
+        
     }
 }

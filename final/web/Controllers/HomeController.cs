@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using web.Data;
+using web.Models;
 using web.Services;
 using web.ViewModels;
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace web.Controllers
 {
@@ -23,25 +21,39 @@ namespace web.Controllers
         }
         
         [Route("home/index")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var productModels = new List<ProductModel>();
+            var products = await _repository.GetProducts();
+
+            productModels.AddRange(products.Select(p => new ProductModel
+            {
+                ProductId = p.ProductId,
+                ProductDescription = p.ProductDescription,
+                ProductExpirationDate = p.ProductExpirationDate,
+                ProductImage = p.ProductImage,
+                ProductName = p.ProductName,
+                ProductQuantity = p.ProductQuantity,
+                ProductUnitPrice = p.ProductUnitPrice
+            }));
+            
+            return View(productModels);
         }
 
         [Route("home/about")]
-        public IActionResult About()
+        public async Task<IActionResult> About()
         {
             return View();
         }
 
         [HttpGet("contact")]
-        public IActionResult Contact()
+        public async Task<IActionResult> Contact()
         {
             return View();
         }
         
         [HttpPost("contact")]
-        public IActionResult Contact(ContactViewModel contactViewModel)
+        public async Task<IActionResult> Contact(ContactViewModel contactViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -59,13 +71,6 @@ namespace web.Controllers
             return View();
         }
 
-        [Route("home/shop")]
-        public IActionResult Shop()
-        {
-            var results = _repository.GetAllProducts();
-
-            return View(results);
-        }
     }
     
 }

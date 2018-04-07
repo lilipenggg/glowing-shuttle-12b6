@@ -10,16 +10,16 @@ namespace web.Data.Entities
             OrderItem = new HashSet<OrderItem>();
         }
 
-        public string Id { get; set; }
+        public string OrderId { get; set; }
         public DateTime OrderDateTime { get; set; }
-        public int AppliedAwardPoints { get; set; }
-        public decimal AppliedDiscount { get; set; }
-        public decimal TotalAmount { get; set; }
-        public string SellerId { get; set; }
-        public string BuyerId { get; set; }
+        public int? OrderAppliedAwardPoints { get; set; }
+        public double? OrderAppliedDiscount { get; set; }
+        public double? OrderTotal { get; set; }
+        public string OrderSellerId { get; set; }
+        public string OrderBuyerId { get; set; }
 
-        public User Buyer { get; set; }
-        public User Seller { get; set; }
+        public User OrderBuyer { get; set; }
+        public User OrderSeller { get; set; }
         public ICollection<OrderItem> OrderItem { get; set; }
     }
 }

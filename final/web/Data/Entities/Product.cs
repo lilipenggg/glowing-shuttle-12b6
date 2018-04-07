@@ -5,16 +5,22 @@ namespace web.Data.Entities
 {
     public partial class Product
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Image { get; set; }
-        public DateTime? ExpirationDate { get; set; }
-        public decimal? UnitPrice { get; set; }
-        public int? Quantity { get; set; }
-        public string SellerId { get; set; }
+        public Product()
+        {
+            ShoppingCartItem = new HashSet<ShoppingCartItem>();
+        }
 
-        public User Seller { get; set; }
+        public string ProductId { get; set; }
+        public string ProductName { get; set; }
+        public string ProductDescription { get; set; }
+        public string ProductImage { get; set; }
+        public DateTime? ProductExpirationDate { get; set; }
+        public double ProductUnitPrice { get; set; }
+        public int ProductQuantity { get; set; }
+        public string ProductSellerId { get; set; }
+
+        public User ProductSeller { get; set; }
         public OrderItem OrderItem { get; set; }
+        public ICollection<ShoppingCartItem> ShoppingCartItem { get; set; }
     }
 }

@@ -5,11 +5,11 @@ namespace web.Data.Entities
 {
     public partial class OrderItem
     {
-        public string Id { get; set; }
-        public int Quantity { get; set; }
-        public string OrderId { get; set; }
+        public string OrderItemId { get; set; }
+        public int? OrderItemQuantity { get; set; }
+        public string OrderItemOrderId { get; set; }
 
-        public Product Product { get; set; }
-        public Order Order { get; set; }
+        public Product OrderItemNavigation { get; set; }
+        public Order OrderItemOrder { get; set; }
     }
 }

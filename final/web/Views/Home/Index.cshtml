@@ -1,8 +1,21 @@
 ﻿@{
     ViewBag.Title = "Home";
 }
+@model IEnumerable<web.Models.ProductModel>
 
-<div class="row">
-    <div class="col-md-6"></div>
-    <div class="col-md-6"></div>
-</div>
+<h1>Shop</h1>
+<p>Count: @Model.Count()</p>
+@foreach (var p in Model)
+{
+    <div class="col-md-3">
+        <div class="well well-sm">
+            <img src="@p.ProductImage" class="img-responsive" alt="@p.ProductName"/>
+            <h3>@p.ProductName</h3>
+            <ul>
+                <li>Price: @p.ProductUnitPrice</li>
+                <li>Description: @p.ProductDescription</li>
+            </ul>
+            <button>Buy</button>
+        </div>
+    </div>
+}

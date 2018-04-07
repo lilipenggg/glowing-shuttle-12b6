@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.AzureAppServices.Internal;
 using web.Data;
+using web.Models;
 using web.Services;
 
 namespace web
@@ -38,9 +39,14 @@ namespace web
                 });
             
             services.AddTransient<IMailService, NullMailService>(); // Need to support for real mail service
-            services.AddScoped<IKioskRepository, KioskRepository>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<ShoppingCartModel>(sp => ShoppingCartModel.GetCart(sp));
+            services.AddTransient<IKioskRepository, KioskRepository>(); // Be able to reuse the service without constructing it again and again
             
             services.AddMvc();
+
+            services.AddMemoryCache();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +64,7 @@ namespace web
             
             app.UseMvc();
             app.UseStaticFiles();
+            app.UseSession();
 
             app.Run(async (context) =>
             {
