@@ -62,9 +62,9 @@ namespace web
                 app.UseExceptionHandler("/error");
             }
             
+            app.UseSession();
             app.UseMvc();
             app.UseStaticFiles();
-            app.UseSession();
 
             app.Run(async (context) =>
             {

@@ -26,8 +26,7 @@ namespace web.Models
 
         public static ShoppingCartModel GetCart(IServiceProvider services)
         {
-            ISession session = services.GetRequiredService<IHttpContextAccessor>()
-                .HttpContext.Session;
+            ISession session = services.GetRequiredService<IHttpContextAccessor>().HttpContext.Session;
 
             var context = services.GetService<KioskContext>();
             
