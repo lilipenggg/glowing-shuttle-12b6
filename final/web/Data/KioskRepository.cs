@@ -28,6 +28,15 @@ namespace web.Data
             return await _ctx.Product.SingleOrDefaultAsync(p => p.ProductId == id);
         }
 
+        public async Task<List<Product>> GetProductByCategory(string category)
+        {
+            return await (from p in _ctx.Product
+                    where p.ProductCategory.CategoryName == category
+                    select p)
+                .Include(x => x.ProductCategory)
+                .ToListAsync();
+        }
+
         #endregion
         
         #region ShoppingCartItem

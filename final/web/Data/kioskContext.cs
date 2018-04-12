@@ -7,19 +7,33 @@ namespace web.Data
 {
     public partial class KioskContext : DbContext
     {
+        public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderItem> OrderItem { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ShoppingCartItem> ShoppingCartItem { get; set; }
         public virtual DbSet<User> User { get; set; }
 
-        public KioskContext(DbContextOptions<KioskContext> options) : base(options)
+        public KioskContext(DbContextOptions<Data.KioskContext> options) : base(options)
         {
             
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.HasIndex(e => e.CategoryName)
+                    .HasName("CategoryName_UNIQUE")
+                    .IsUnique();
+
+                entity.Property(e => e.CategoryId).HasMaxLength(50);
+
+                entity.Property(e => e.CategoryName)
+                    .IsRequired()
+                    .HasMaxLength(45);
+            });
+
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.HasIndex(e => e.OrderBuyerId)
@@ -74,10 +88,17 @@ namespace web.Data
 
             modelBuilder.Entity<Product>(entity =>
             {
+                entity.HasIndex(e => e.ProductCategoryId)
+                    .HasName("Product_Category_idx");
+
                 entity.HasIndex(e => e.ProductSellerId)
-                    .HasName("SellerId");
+                    .HasName("Product_User");
 
                 entity.Property(e => e.ProductId).HasMaxLength(50);
+
+                entity.Property(e => e.ProductCategoryId)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.ProductDescription).HasMaxLength(300);
 
@@ -85,16 +106,27 @@ namespace web.Data
 
                 entity.Property(e => e.ProductImage).HasMaxLength(100);
 
-                entity.Property(e => e.ProductName).HasMaxLength(50);
+                entity.Property(e => e.ProductName)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.ProductQuantity).HasColumnType("int(11)");
 
-                entity.Property(e => e.ProductSellerId).HasMaxLength(50);
+                entity.Property(e => e.ProductSellerId)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.ProductCategory)
+                    .WithMany(p => p.Product)
+                    .HasForeignKey(d => d.ProductCategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Product_Category");
 
                 entity.HasOne(d => d.ProductSeller)
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.ProductSellerId)
-                    .HasConstraintName("Product_ibfk_1");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Product_User");
             });
 
             modelBuilder.Entity<ShoppingCartItem>(entity =>

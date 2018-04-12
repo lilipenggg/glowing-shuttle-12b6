@@ -9,6 +9,7 @@ using web.Data;
 using web.Data.Entities;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using KioskContext = web.Data.KioskContext;
 
 namespace web.Models
 {

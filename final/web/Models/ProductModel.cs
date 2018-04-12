@@ -14,5 +14,6 @@ namespace web.Models
         
         public UserModel Seller { get; set; }
         public OrderItemModel OrderItem { get; set; }
+        public CategoryModel ProductCategory { get; set; }
     }
 }

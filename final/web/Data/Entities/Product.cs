@@ -18,7 +18,9 @@ namespace web.Data.Entities
         public double ProductUnitPrice { get; set; }
         public int ProductQuantity { get; set; }
         public string ProductSellerId { get; set; }
+        public string ProductCategoryId { get; set; }
 
+        public Category ProductCategory { get; set; }
         public User ProductSeller { get; set; }
         public OrderItem OrderItem { get; set; }
         public ICollection<ShoppingCartItem> ShoppingCartItem { get; set; }
