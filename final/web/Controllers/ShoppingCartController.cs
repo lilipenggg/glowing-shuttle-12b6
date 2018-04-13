@@ -2,16 +2,17 @@
 using System.Threading.Tasks;
 using web.Data;
 using web.Models;
+using web.Services;
 using web.ViewModels;
 
 namespace web.Controllers
 {
     public class ShoppingCartController : Controller
     {
-        private readonly KioskRepository _repository;
+        private readonly IKioskRepository _repository;
         private readonly ShoppingCartModel _shoppingCart;
 
-        public ShoppingCartController(KioskRepository repository, ShoppingCartModel shoppingCart)
+        public ShoppingCartController(IKioskRepository repository, ShoppingCartModel shoppingCart)
         {
             _repository = repository;
             _shoppingCart = shoppingCart;
@@ -30,6 +31,17 @@ namespace web.Controllers
             };
 
             return View(shoppingCartViewModel);
+        }
+        
+        public async Task<RedirectToActionResult> AddToShoppingCart(string productId)
+        {
+            var selectedProduct = await _repository.GetProductById(productId);
+
+            if (selectedProduct != null)
+            {
+                await _shoppingCart.AddToCart(selectedProduct, 1);
+            }
+            return RedirectToAction("Index");
         }
     }
 }

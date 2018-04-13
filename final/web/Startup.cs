@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.AzureAppServices.Internal;
+using web.Controllers;
 using web.Data;
 using web.Models;
 using web.Services;
@@ -63,7 +64,18 @@ namespace web
             }
             
             app.UseSession();
-            app.UseMvc();
+            // app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "categoryfilter",
+                    template: "Product/{action}/{category?}",
+                    defaults: new {Controller = "Product", action = "List"});
+                
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
             app.UseStaticFiles();
 
             app.Run(async (context) =>

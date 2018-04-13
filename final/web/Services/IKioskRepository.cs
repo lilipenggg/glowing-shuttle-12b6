@@ -11,6 +11,10 @@ namespace web.Services
         Task<Product> GetProductById(string id);
         Task<List<Product>> GetProductByCategory(string category);
 
+        Task<List<Category>> GetCategories();
+        Task<Category> GetCategoryById(string categoryId);
+        Task<Category> GetCategoryByName(string categoryName);
+
         Task<List<ShoppingCartItem>> GetShoppingCartItems(string cartId);
         
         Task<List<Order>> GetOrders();

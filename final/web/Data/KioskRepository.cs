@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using web.Services;
 using web.Data.Entities;
 
@@ -35,6 +36,25 @@ namespace web.Data
                     select p)
                 .Include(x => x.ProductCategory)
                 .ToListAsync();
+        }
+
+        #endregion
+
+        #region Category
+
+        public async Task<List<Category>> GetCategories()
+        {
+            return await _ctx.Category.OrderBy(c => c.CategoryName).ToListAsync();
+        }
+
+        public async Task<Category> GetCategoryById(string categoryId)
+        {
+            return await _ctx.Category.SingleOrDefaultAsync(c => c.CategoryId == categoryId);
+        }
+
+        public async Task<Category> GetCategoryByName(string categoryName)
+        {
+            return await _ctx.Category.SingleOrDefaultAsync(c => c.CategoryName == categoryName);
         }
 
         #endregion

@@ -9,7 +9,7 @@ using web.ViewModels;
 
 namespace web.Controllers
 {
-    public class ProductController
+    public class ProductController : Controller
     {
         private readonly IKioskRepository _repository;
 
@@ -18,10 +18,13 @@ namespace web.Controllers
             _repository = repository;
         }
 
-        public async Task<List<ProductModel>> List(string category)
+        public async Task<ViewResult> List(string category)
         {
-            var productModels = new List<ProductModel>();
+            var model = new ProductListViewModel();
+            //var productModels = new List<ProductModel>();
             List<web.Data.Entities.Product> products;
+
+            model.ProductModels = new List<ProductModel>();
 
             if (string.IsNullOrEmpty(category))
             {
@@ -32,7 +35,7 @@ namespace web.Controllers
                 products = await _repository.GetProductByCategory(category);
             }
 
-            productModels.AddRange(products.Select(p => new ProductModel
+            model.ProductModels.AddRange(products.Select(p => new ProductModel
             {
                 ProductId = p.ProductId,
                 ProductDescription = p.ProductDescription,
@@ -43,7 +46,34 @@ namespace web.Controllers
                 ProductUnitPrice = p.ProductUnitPrice
             }));
 
-            return productModels;
+            return View(model);
+        }
+
+        public async Task<IActionResult> Details(string productId)
+        {
+            var product = await _repository.GetProductById(productId);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+            
+            var productModel = new ProductModel
+            {
+                ProductId = product.ProductId,
+                ProductName = product.ProductName,
+                ProductDescription = product.ProductDescription,
+                ProductCategory = new CategoryModel
+                {
+                    CategoryId = product.ProductCategory.CategoryId,
+                    CategoryName = product.ProductCategory.CategoryName
+                },
+                ProductExpirationDate = product.ProductExpirationDate,
+                ProductImage = product.ProductImage,
+                ProductQuantity = product.ProductQuantity,
+                ProductUnitPrice = product.ProductUnitPrice
+            };
+            return View(productModel);
         }
 
     }
