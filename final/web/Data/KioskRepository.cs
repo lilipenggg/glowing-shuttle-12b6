@@ -26,7 +26,7 @@ namespace web.Data
 
         public async Task<Product> GetProductById(string id)
         {
-            return await _ctx.Product.SingleOrDefaultAsync(p => p.ProductId == id);
+            return await _ctx.Product.Include(p => p.ProductCategory).SingleOrDefaultAsync(p => p.ProductId == id);
         }
 
         public async Task<List<Product>> GetProductByCategory(string category)

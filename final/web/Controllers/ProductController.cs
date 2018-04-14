@@ -29,10 +29,12 @@ namespace web.Controllers
             if (string.IsNullOrEmpty(category))
             {
                 products = await _repository.GetProducts();
+                model.CurrentCategory = "All products";
             }
             else
             {
                 products = await _repository.GetProductByCategory(category);
+                model.CurrentCategory = category;
             }
 
             model.ProductModels.AddRange(products.Select(p => new ProductModel
