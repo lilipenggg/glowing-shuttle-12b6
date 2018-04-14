@@ -17,9 +17,11 @@ namespace web.Data.Entities
         public double? OrderTotal { get; set; }
         public string OrderSellerId { get; set; }
         public string OrderBuyerId { get; set; }
+        public string OrderGuestBuyerId { get; set; }
 
-        public User OrderBuyer { get; set; }
-        public User OrderSeller { get; set; }
+        public BusinessUser OrderBuyer { get; set; }
+        public GuestUser OrderGuestBuyer { get; set; }
+        public BusinessUser OrderSeller { get; set; }
         public ICollection<OrderItem> OrderItem { get; set; }
     }
 }

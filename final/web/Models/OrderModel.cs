@@ -10,8 +10,6 @@ namespace web.Models
         public int OrderAppliedAwardPoints { get; set; }
         public decimal OrderAppliedDiscount { get; set; }
         public decimal OrderTotalAmount { get; set; }
-        public string OrderSellerId { get; set; }
-        public string OrderBuyerId { get; set; }
 
         public UserModel OrderBuyer { get; set; }
         public UserModel OrderSeller { get; set; }
