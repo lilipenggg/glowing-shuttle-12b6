@@ -50,6 +50,7 @@ namespace web.Models
                 {
                     ShoppingCartId = ShoppingCartId,
                     Product = product,
+                    ProductId = product.ProductId,
                     ShoppingCartItemAmount = 1
                 };
 
@@ -113,10 +114,14 @@ namespace web.Models
             var shoppingCartItems = await _context.ShoppingCartItem
                     .Where(c => c.ShoppingCartId == ShoppingCartId)
                     .ToListAsync();
-            
-            var total = shoppingCartItems
-                .Select(c => c.Product.ProductUnitPrice * c.ShoppingCartItemAmount)
-                .Sum();
+
+            var total = 0.0;
+            if (shoppingCartItems.Count != 0)
+            {
+                total = shoppingCartItems
+                    .Select(c => c.Product.ProductUnitPrice * c.ShoppingCartItemAmount)
+                    .Sum();
+            }
 
             return total;
         }
