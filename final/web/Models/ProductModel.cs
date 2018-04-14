@@ -12,7 +12,7 @@ namespace web.Models
         public double ProductUnitPrice { get; set; }
         public int ProductQuantity { get; set; }
         
-        public UserModel Seller { get; set; }
+        public BusinessUserModel Seller { get; set; }
         public OrderItemModel OrderItem { get; set; }
         public CategoryModel ProductCategory { get; set; }
     }

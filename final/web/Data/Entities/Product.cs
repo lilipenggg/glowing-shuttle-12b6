@@ -21,7 +21,7 @@ namespace web.Data.Entities
         public string ProductCategoryId { get; set; }
 
         public Category ProductCategory { get; set; }
-        public ApplicationUser ProductSeller { get; set; }
+        public BusinessUser ProductSeller { get; set; }
         public OrderItem OrderItem { get; set; }
         public ICollection<ShoppingCartItem> ShoppingCartItem { get; set; }
     }

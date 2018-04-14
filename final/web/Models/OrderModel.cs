@@ -11,8 +11,8 @@ namespace web.Models
         public decimal OrderAppliedDiscount { get; set; }
         public decimal OrderTotalAmount { get; set; }
 
-        public UserModel OrderBuyer { get; set; }
-        public UserModel OrderSeller { get; set; }
+        public BusinessUserModel OrderBuyer { get; set; }
+        public BusinessUserModel OrderSeller { get; set; }
         public ICollection<OrderItemModel> OrderItems { get; set; }
     }
 }

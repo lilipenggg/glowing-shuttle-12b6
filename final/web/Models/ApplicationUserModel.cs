@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace web.Data.Entities
+namespace web.Models
 {
-    public partial class ApplicationUser
+    public class ApplicationUserModel
     {
         public string ApplicationUserId { get; set; }
         public string ApplicationUserFirstName { get; set; }
@@ -12,7 +11,7 @@ namespace web.Data.Entities
         public string ApplicationUserPassword { get; set; }
         public string ApplicationUserTypeId { get; set; }
 
-        public UserType ApplicationUserType { get; set; }
-        public BusinessUser BusinessUser { get; set; }
+        public UserTypeModel ApplicationUserType { get; set; }
+        public BusinessUserModel BusinessUser { get; set; }
     }
 }

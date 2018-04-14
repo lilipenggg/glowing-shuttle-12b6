@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace web.Data.Entities
+namespace web.Models
 {
-    public partial class BusinessUser
+    public class BusinessUserModel
     {
-        public BusinessUser()
+        public BusinessUserModel()
         {
-            OrderOrderBuyer = new HashSet<Order>();
-            OrderOrderSeller = new HashSet<Order>();
-            Product = new HashSet<Product>();
+            OrderOrderBuyer = new HashSet<OrderModel>();
+            OrderOrderSeller = new HashSet<OrderModel>();
+            Product = new HashSet<ProductModel>();
         }
 
         public string BusinessUserId { get; set; }
@@ -26,10 +25,10 @@ namespace web.Data.Entities
         public string BusinessUserBillingState { get; set; }
         public int BusinessUserBillingZipCode { get; set; }
 
-        public CreditCard BusinessUserCreditCard { get; set; }
-        public ApplicationUser BusinessApplicationUser { get; set; }
-        public ICollection<Order> OrderOrderBuyer { get; set; }
-        public ICollection<Order> OrderOrderSeller { get; set; }
-        public ICollection<Product> Product { get; set; }
+        public CreditCardModel BusinessUserCreditCard { get; set; }
+        public ApplicationUserModel BusinessApplicationUser { get; set; }
+        public ICollection<OrderModel> OrderOrderBuyer { get; set; }
+        public ICollection<OrderModel> OrderOrderSeller { get; set; }
+        public ICollection<ProductModel> Product { get; set; }
     }
 }

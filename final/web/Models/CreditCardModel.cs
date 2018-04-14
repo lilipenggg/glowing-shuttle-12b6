@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace web.Data.Entities
+namespace web.Models
 {
-    public partial class CreditCard
+    public class CreditCardModel
     {
-        public CreditCard()
+        public CreditCardModel()
         {
-            BusinessUser = new HashSet<BusinessUser>();
+            BusinessUser = new HashSet<BusinessUserModel>();
         }
 
         public string CreditCardId { get; set; }
@@ -16,8 +16,9 @@ namespace web.Data.Entities
         public DateTime CreditCardExpirationDate { get; set; }
         public string CreditCardNumber { get; set; }
         public int CreditCardCvv { get; set; }
+        public string CreditCardUserId { get; set; }
 
-        public GuestUser GuestUser { get; set; }
-        public ICollection<BusinessUser> BusinessUser { get; set; }
+        public GuestUserModel GuestUser { get; set; }
+        public ICollection<BusinessUserModel> BusinessUser { get; set; }
     }
 }

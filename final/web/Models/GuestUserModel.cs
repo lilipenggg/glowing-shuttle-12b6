@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace web.Data.Entities
+namespace web.Models
 {
-    public partial class GuestUser
+    public class GuestUserModel
     {
-        public GuestUser()
+        public GuestUserModel()
         {
-            Order = new HashSet<Order>();
+            Order = new HashSet<OrderModel>();
         }
 
         public string GuestUserId { get; set; }
@@ -24,7 +23,7 @@ namespace web.Data.Entities
         public string GuestUserBillingZipState { get; set; }
         public int GuestUserBillingZipCode { get; set; }
 
-        public CreditCard GuestUserCreditCard { get; set; }
-        public ICollection<Order> Order { get; set; }
+        public CreditCardModel GuestUserCreditCard { get; set; }
+        public ICollection<OrderModel> Order { get; set; }
     }
 }

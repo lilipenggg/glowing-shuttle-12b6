@@ -20,7 +20,7 @@ namespace web.Services
         Task<List<Order>> GetOrders();
         Task<Order> GetOrderById(string id);
 
-        Task<List<User>> GetUsers();
-        Task<User> GetUserById(string id);
+        Task<List<BusinessUser>> GetBusinessUsers();
+        Task<BusinessUser> GetBusinessUserById(string id);
     }
 }

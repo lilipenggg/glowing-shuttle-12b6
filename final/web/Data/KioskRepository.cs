@@ -86,18 +86,18 @@ namespace web.Data
 
         #endregion
         
-        #region User
+        #region BusinessUser
 
-        public async Task<List<User>> GetUsers()
+        public async Task<List<BusinessUser>> GetBusinessUsers()
         {
-            return await (from u in _ctx.User
-                orderby u.UserId
+            return await (from u in _ctx.BusinessUser
+                orderby u.BusinessUserId
                 select u).ToListAsync();
         }
 
-        public async Task<User> GetUserById(string id)
+        public async Task<BusinessUser> GetBusinessUserById(string id)
         {
-            return await _ctx.User.SingleOrDefaultAsync(u => u.UserId == id);
+            return await _ctx.BusinessUser.SingleOrDefaultAsync(u => u.BusinessUserId == id);
         }
         
         #endregion
