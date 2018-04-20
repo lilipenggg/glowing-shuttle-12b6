@@ -18,11 +18,11 @@ namespace web.Data.Entities
         public DateTime? ProductExpirationDate { get; set; }
         public double ProductUnitPrice { get; set; }
         public int ProductQuantity { get; set; }
-        public string ProductSellerId { get; set; }
+        public string ProductVendorId { get; set; }
         public string ProductCategoryId { get; set; }
 
         public Category ProductCategory { get; set; }
-        public BusinessUser ProductSeller { get; set; }
+        public ApplicationUser ProductVendor { get; set; }
         public ICollection<OrderItem> OrderItem { get; set; }
         public ICollection<ShoppingCartItem> ShoppingCartItem { get; set; }
     }

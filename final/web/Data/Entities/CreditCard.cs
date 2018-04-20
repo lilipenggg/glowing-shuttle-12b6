@@ -7,17 +7,16 @@ namespace web.Data.Entities
     {
         public CreditCard()
         {
-            BusinessUser = new HashSet<BusinessUser>();
+            ApplicationUser = new HashSet<ApplicationUser>();
         }
 
         public string CreditCardId { get; set; }
         public string CreditCardFirstName { get; set; }
         public string CreditCardLastName { get; set; }
-        public DateTime CreditCardExpirationDate { get; set; }
+        public DateTime? CreditCardExpirationDate { get; set; }
         public string CreditCardNumber { get; set; }
-        public int CreditCardCvv { get; set; }
+        public int? CreditCardCvv { get; set; }
 
-        public GuestUser GuestUser { get; set; }
-        public ICollection<BusinessUser> BusinessUser { get; set; }
+        public ICollection<ApplicationUser> ApplicationUser { get; set; }
     }
 }
