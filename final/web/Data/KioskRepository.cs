@@ -101,7 +101,8 @@ namespace web.Data
         public async Task CreateOrder(OrderModel orderModel)
         {
             string orderId = new Guid().ToString();
-            var shoppingCartItems = _shoppingCart.ShoppingCartItems;
+            var shoppingCartItems = await _shoppingCart.GetShoppingCartItems();
+            _shoppingCart.ShoppingCartItems = shoppingCartItems;
             
             List<OrderItem> orderItems = new List<OrderItem>();
             foreach (var item in shoppingCartItems)
