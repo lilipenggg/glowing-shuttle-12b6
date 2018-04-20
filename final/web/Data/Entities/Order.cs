@@ -30,7 +30,9 @@ namespace web.Data.Entities
         public string OrderShippingLastName { get; set; }
         public string OrderBillingFirstName { get; set; }
         public string OrderBillingLastName { get; set; }
+        public string OrderCreditCardId { get; set; }
 
+        public CreditCard OrderCreditCard { get; set; }
         public ApplicationUser OrderCustomer { get; set; }
         public ICollection<OrderItem> OrderItem { get; set; }
     }

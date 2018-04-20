@@ -8,6 +8,7 @@ namespace web.Data.Entities
         public CreditCard()
         {
             ApplicationUser = new HashSet<ApplicationUser>();
+            Order = new HashSet<Order>();
         }
 
         public string CreditCardId { get; set; }
@@ -18,5 +19,6 @@ namespace web.Data.Entities
         public int? CreditCardCvv { get; set; }
 
         public ICollection<ApplicationUser> ApplicationUser { get; set; }
+        public ICollection<Order> Order { get; set; }
     }
 }
