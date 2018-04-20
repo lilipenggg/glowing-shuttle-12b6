@@ -20,8 +20,5 @@ namespace web.Services
         Task<List<Order>> GetOrders();
         Task<Order> GetOrderById(string id);
         Task CreateOrder(web.Models.OrderModel orderModel);
-
-        Task<List<BusinessUser>> GetBusinessUsers();
-        Task<BusinessUser> GetBusinessUserById(string id);
     }
 }

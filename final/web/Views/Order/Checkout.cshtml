@@ -3,7 +3,7 @@
 <form asp-action="Checkout" method="post" class="form-horizontal" role="form">
     <h4>You're just one step away from taking items in your shopping cart home!</h4>
     
-    <div asp-validation-summary="All" class="text-danger"></div>
+    @*<div asp-validation-summary="All" class="text-danger"></div>*@
 
     <div class="form-group">
         <label asp-for="OrderShippingLastName" class="col-md-2 control-label"></label>
@@ -54,10 +54,10 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="OrderShippingZipcode" class="col-md-2 control-label"></label>
+        <label asp-for="OrderShippingZipCode" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="OrderShippingZipcode" class="form-control" />
-            <span asp-validation-for="OrderShippingZipcode" class="text-danger"></span>
+            <input asp-for="OrderShippingZipCode" class="form-control" />
+            <span asp-validation-for="OrderShippingZipCode" class="text-danger"></span>
         </div>
     </div>
     

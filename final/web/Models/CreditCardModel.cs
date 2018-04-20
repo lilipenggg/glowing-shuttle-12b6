@@ -34,7 +34,6 @@ namespace web.Models
         
         [Required(ErrorMessage = "Please enter credit card CVV")]
         [Display(Name = "CVV")]
-        [StringLength(3)]
         public int CreditCardCvv { get; set; }
         
         public ICollection<ApplicationUserModel> ApplicationUser { get; set; }

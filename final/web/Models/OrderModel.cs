@@ -38,7 +38,6 @@ namespace web.Models
         
         [Required(ErrorMessage = "Please enter your shipping zip code")]
         [Display(Name = "Shipping Zip Code")]
-        [StringLength(5)]
         public int OrderShippingZipCode { get; set; }
         
         [Required(ErrorMessage = "Please enter your billing address")]
@@ -61,7 +60,6 @@ namespace web.Models
         
         [Required(ErrorMessage = "Please enter your billing zipcode")]
         [Display(Name = "Billing Zipcode")]
-        [StringLength(5)]
         public string OrderBillingZipCode { get; set; }
         
         [Required(ErrorMessage = "Please enter your shipping first name")]

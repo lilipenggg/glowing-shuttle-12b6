@@ -8,10 +8,8 @@ namespace web.Data
     public partial class KioskContext : DbContext
     {
         public virtual DbSet<ApplicationUser> ApplicationUser { get; set; }
-        public virtual DbSet<BusinessUser> BusinessUser { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<CreditCard> CreditCard { get; set; }
-        public virtual DbSet<GuestUser> GuestUser { get; set; }
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderItem> OrderItem { get; set; }
         public virtual DbSet<Product> Product { get; set; }
@@ -27,10 +25,17 @@ namespace web.Data
         {
             modelBuilder.Entity<ApplicationUser>(entity =>
             {
+                entity.HasIndex(e => e.ApplicationUserCreditCardId)
+                    .HasName("ApplicationUser_CreditCard_idx");
+
                 entity.HasIndex(e => e.ApplicationUserTypeId)
                     .HasName("ApplicationUserType_UserType_idx");
 
                 entity.Property(e => e.ApplicationUserId).HasMaxLength(50);
+
+                entity.Property(e => e.ApplicationUserAwardPoints).HasColumnType("int(11)");
+
+                entity.Property(e => e.ApplicationUserCreditCardId).HasMaxLength(50);
 
                 entity.Property(e => e.ApplicationUserEmail)
                     .IsRequired()
@@ -48,73 +53,22 @@ namespace web.Data
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.Property(e => e.ApplicationUserPhoneNumber).HasMaxLength(45);
+
                 entity.Property(e => e.ApplicationUserTypeId)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.HasOne(d => d.ApplicationUserCreditCard)
+                    .WithMany(p => p.ApplicationUser)
+                    .HasForeignKey(d => d.ApplicationUserCreditCardId)
+                    .HasConstraintName("ApplicationUser_CreditCard");
 
                 entity.HasOne(d => d.ApplicationUserType)
                     .WithMany(p => p.ApplicationUser)
                     .HasForeignKey(d => d.ApplicationUserTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("ApplicationUserTypeId_UserType");
-            });
-
-            modelBuilder.Entity<BusinessUser>(entity =>
-            {
-                entity.HasIndex(e => e.BusinessUserCreditCardId)
-                    .HasName("BusinessUser_CreditCard_idx");
-
-                entity.Property(e => e.BusinessUserId).HasMaxLength(50);
-
-                entity.Property(e => e.BusinessUserAwardPoints).HasColumnType("int(11)");
-
-                entity.Property(e => e.BusinessUserBillingAddress)
-                    .IsRequired()
-                    .HasMaxLength(200);
-
-                entity.Property(e => e.BusinessUserBillingAddress2).HasMaxLength(200);
-
-                entity.Property(e => e.BusinessUserBillingCity)
-                    .IsRequired()
-                    .HasMaxLength(45);
-
-                entity.Property(e => e.BusinessUserBillingState)
-                    .IsRequired()
-                    .HasMaxLength(45);
-
-                entity.Property(e => e.BusinessUserBillingZipCode).HasColumnType("int(11)");
-
-                entity.Property(e => e.BusinessUserCreditCardId)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.BusinessUserShippingAddress)
-                    .IsRequired()
-                    .HasMaxLength(200);
-
-                entity.Property(e => e.BusinessUserShippingAddress2).HasMaxLength(200);
-
-                entity.Property(e => e.BusinessUserShippingCity)
-                    .IsRequired()
-                    .HasMaxLength(45);
-
-                entity.Property(e => e.BusinessUserShippingState)
-                    .IsRequired()
-                    .HasMaxLength(45);
-
-                entity.Property(e => e.BusinessUserShippingZipCode).HasColumnType("int(11)");
-
-                entity.HasOne(d => d.BusinessUserCreditCard)
-                    .WithMany(p => p.BusinessUser)
-                    .HasForeignKey(d => d.BusinessUserCreditCardId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("BusinessUser_CreditCard");
-
-                entity.HasOne(d => d.BusinessUserNavigation)
-                    .WithOne(p => p.BusinessUser)
-                    .HasForeignKey<BusinessUser>(d => d.BusinessUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("BusinessUser_ApplicationUser");
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -136,105 +90,94 @@ namespace web.Data
 
                 entity.Property(e => e.CreditCardCvv)
                     .HasColumnName("CreditCardCVV")
-                    .HasColumnType("int(3)");
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.CreditCardExpirationDate).HasColumnType("datetime");
 
-                entity.Property(e => e.CreditCardFirstName)
-                    .IsRequired()
-                    .HasMaxLength(45);
+                entity.Property(e => e.CreditCardFirstName).HasMaxLength(30);
 
-                entity.Property(e => e.CreditCardLastName)
-                    .IsRequired()
-                    .HasMaxLength(45);
+                entity.Property(e => e.CreditCardLastName).HasMaxLength(30);
 
-                entity.Property(e => e.CreditCardNumber)
-                    .IsRequired()
-                    .HasMaxLength(500);
-            });
-
-            modelBuilder.Entity<GuestUser>(entity =>
-            {
-                entity.Property(e => e.GuestUserId).HasMaxLength(50);
-
-                entity.Property(e => e.GuestUserBillingAddress)
-                    .IsRequired()
-                    .HasMaxLength(200);
-
-                entity.Property(e => e.GuestUserBillingAddress2)
-                    .IsRequired()
-                    .HasMaxLength(45);
-
-                entity.Property(e => e.GuestUserBillingCity)
-                    .IsRequired()
-                    .HasMaxLength(45);
-
-                entity.Property(e => e.GuestUserBillingZipCode).HasColumnType("int(11)");
-
-                entity.Property(e => e.GuestUserBillingZipState)
-                    .IsRequired()
-                    .HasMaxLength(45);
-
-                entity.Property(e => e.GuestUserFirstName)
-                    .IsRequired()
-                    .HasMaxLength(45);
-
-                entity.Property(e => e.GuestUserLastName)
-                    .IsRequired()
-                    .HasMaxLength(45);
-
-                entity.Property(e => e.GuestUserShippingAddress)
-                    .IsRequired()
-                    .HasMaxLength(200);
-
-                entity.Property(e => e.GuestUserShippingAddress2)
-                    .IsRequired()
-                    .HasMaxLength(45);
-
-                entity.Property(e => e.GuestUserShippingCity)
-                    .IsRequired()
-                    .HasMaxLength(45);
-
-                entity.Property(e => e.GuestUserShippingState)
-                    .IsRequired()
-                    .HasMaxLength(45);
-
-                entity.Property(e => e.GuestUserShippingZipCode).HasColumnType("int(11)");
-
-                entity.HasOne(d => d.GuestUserNavigation)
-                    .WithOne(p => p.GuestUser)
-                    .HasForeignKey<GuestUser>(d => d.GuestUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("GuestUser_CreditCard");
+                entity.Property(e => e.CreditCardNumber).HasMaxLength(100);
             });
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.HasIndex(e => e.OrderBuyerId)
-                    .HasName("OrderBuyer_BusinessUser_idx");
+                entity.HasIndex(e => e.OrderCreditCardId)
+                    .HasName("Order_CreditCard_idx");
 
-                entity.HasIndex(e => e.OrderGuestBuyerId)
-                    .HasName("OrderGuestBuyer_GuestUser_idx");
+                entity.HasIndex(e => e.OrderCustomerId)
+                    .HasName("OrderBuyer_BusinessUser_idx");
 
                 entity.Property(e => e.OrderId).HasMaxLength(50);
 
                 entity.Property(e => e.OrderAppliedAwardPoints).HasColumnType("int(11)");
 
-                entity.Property(e => e.OrderBuyerId).HasMaxLength(50);
+                entity.Property(e => e.OrderBillingAddress1)
+                    .IsRequired()
+                    .HasMaxLength(300);
+
+                entity.Property(e => e.OrderBillingAddress2).HasMaxLength(300);
+
+                entity.Property(e => e.OrderBillingCity)
+                    .IsRequired()
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.OrderBillingFirstName)
+                    .IsRequired()
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.OrderBillingLastName)
+                    .IsRequired()
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.OrderBillingState)
+                    .IsRequired()
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.OrderBillingZipCode)
+                    .IsRequired()
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.OrderCreditCardId).HasMaxLength(50);
+
+                entity.Property(e => e.OrderCustomerId).HasMaxLength(50);
 
                 entity.Property(e => e.OrderDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.OrderGuestBuyerId).HasMaxLength(50);
+                entity.Property(e => e.OrderShippingAddress1)
+                    .IsRequired()
+                    .HasMaxLength(300);
 
-                entity.HasOne(d => d.OrderBuyer)
-                    .WithMany(p => p.Order)
-                    .HasForeignKey(d => d.OrderBuyerId)
-                    .HasConstraintName("OrderBuyer_BusinessUser");
+                entity.Property(e => e.OrderShippingAddress2).HasMaxLength(300);
 
-                entity.HasOne(d => d.OrderGuestBuyer)
+                entity.Property(e => e.OrderShippingCity)
+                    .IsRequired()
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.OrderShippingFirstName)
+                    .IsRequired()
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.OrderShippingLastName)
+                    .IsRequired()
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.OrderShippingState)
+                    .IsRequired()
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.OrderShippingZipCode).HasColumnType("int(11)");
+
+                entity.HasOne(d => d.OrderCreditCard)
                     .WithMany(p => p.Order)
-                    .HasForeignKey(d => d.OrderGuestBuyerId)
-                    .HasConstraintName("OrderGuestBuyer_GuestUser");
+                    .HasForeignKey(d => d.OrderCreditCardId)
+                    .HasConstraintName("Order_CreditCard");
+
+                entity.HasOne(d => d.OrderCustomer)
+                    .WithMany(p => p.Order)
+                    .HasForeignKey(d => d.OrderCustomerId)
+                    .HasConstraintName("Orderr_ApplicationUser");
             });
 
             modelBuilder.Entity<OrderItem>(entity =>
@@ -275,8 +218,8 @@ namespace web.Data
                 entity.HasIndex(e => e.ProductCategoryId)
                     .HasName("Product_Category_idx");
 
-                entity.HasIndex(e => e.ProductSellerId)
-                    .HasName("Product_User_idx");
+                entity.HasIndex(e => e.ProductVendorId)
+                    .HasName("Product_ApplicationUser_idx");
 
                 entity.Property(e => e.ProductId).HasMaxLength(50);
 
@@ -296,7 +239,7 @@ namespace web.Data
 
                 entity.Property(e => e.ProductQuantity).HasColumnType("int(11)");
 
-                entity.Property(e => e.ProductSellerId)
+                entity.Property(e => e.ProductVendorId)
                     .IsRequired()
                     .HasMaxLength(50);
 
@@ -306,11 +249,11 @@ namespace web.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Product_Category");
 
-                entity.HasOne(d => d.ProductSeller)
+                entity.HasOne(d => d.ProductVendor)
                     .WithMany(p => p.Product)
-                    .HasForeignKey(d => d.ProductSellerId)
+                    .HasForeignKey(d => d.ProductVendorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Product_BusinessUser");
+                    .HasConstraintName("Product_ApplicationUser");
             });
 
             modelBuilder.Entity<ShoppingCartItem>(entity =>
