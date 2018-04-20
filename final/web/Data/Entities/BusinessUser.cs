@@ -7,8 +7,7 @@ namespace web.Data.Entities
     {
         public BusinessUser()
         {
-            OrderOrderBuyer = new HashSet<Order>();
-            OrderOrderSeller = new HashSet<Order>();
+            Order = new HashSet<Order>();
             Product = new HashSet<Product>();
         }
 
@@ -27,9 +26,8 @@ namespace web.Data.Entities
         public int BusinessUserBillingZipCode { get; set; }
 
         public CreditCard BusinessUserCreditCard { get; set; }
-        public ApplicationUser BusinessApplicationUser { get; set; }
-        public ICollection<Order> OrderOrderBuyer { get; set; }
-        public ICollection<Order> OrderOrderSeller { get; set; }
+        public ApplicationUser BusinessUserNavigation { get; set; }
+        public ICollection<Order> Order { get; set; }
         public ICollection<Product> Product { get; set; }
     }
 }

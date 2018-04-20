@@ -7,6 +7,7 @@ namespace web.Data.Entities
     {
         public Product()
         {
+            OrderItem = new HashSet<OrderItem>();
             ShoppingCartItem = new HashSet<ShoppingCartItem>();
         }
 
@@ -22,7 +23,7 @@ namespace web.Data.Entities
 
         public Category ProductCategory { get; set; }
         public BusinessUser ProductSeller { get; set; }
-        public OrderItem OrderItem { get; set; }
+        public ICollection<OrderItem> OrderItem { get; set; }
         public ICollection<ShoppingCartItem> ShoppingCartItem { get; set; }
     }
 }

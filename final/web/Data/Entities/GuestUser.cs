@@ -24,7 +24,7 @@ namespace web.Data.Entities
         public string GuestUserBillingZipState { get; set; }
         public int GuestUserBillingZipCode { get; set; }
 
-        public CreditCard GuestUserCreditCard { get; set; }
+        public CreditCard GuestUserNavigation { get; set; }
         public ICollection<Order> Order { get; set; }
     }
 }

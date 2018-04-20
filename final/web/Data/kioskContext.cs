@@ -110,7 +110,7 @@ namespace web.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("BusinessUser_CreditCard");
 
-                entity.HasOne(d => d.BusinessApplicationUser)
+                entity.HasOne(d => d.BusinessUserNavigation)
                     .WithOne(p => p.BusinessUser)
                     .HasForeignKey<BusinessUser>(d => d.BusinessUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -144,13 +144,13 @@ namespace web.Data
                     .IsRequired()
                     .HasMaxLength(45);
 
+                entity.Property(e => e.CreditCardLastName)
+                    .IsRequired()
+                    .HasMaxLength(45);
+
                 entity.Property(e => e.CreditCardNumber)
                     .IsRequired()
                     .HasMaxLength(500);
-
-                entity.Property(e => e.CreditCartLastName)
-                    .IsRequired()
-                    .HasMaxLength(45);
             });
 
             modelBuilder.Entity<GuestUser>(entity =>
@@ -201,7 +201,7 @@ namespace web.Data
 
                 entity.Property(e => e.GuestUserShippingZipCode).HasColumnType("int(11)");
 
-                entity.HasOne(d => d.GuestUserCreditCard)
+                entity.HasOne(d => d.GuestUserNavigation)
                     .WithOne(p => p.GuestUser)
                     .HasForeignKey<GuestUser>(d => d.GuestUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -216,9 +216,6 @@ namespace web.Data
                 entity.HasIndex(e => e.OrderGuestBuyerId)
                     .HasName("OrderGuestBuyer_GuestUser_idx");
 
-                entity.HasIndex(e => e.OrderSellerId)
-                    .HasName("OrderSeller_BusinessUser_idx");
-
                 entity.Property(e => e.OrderId).HasMaxLength(50);
 
                 entity.Property(e => e.OrderAppliedAwardPoints).HasColumnType("int(11)");
@@ -229,12 +226,8 @@ namespace web.Data
 
                 entity.Property(e => e.OrderGuestBuyerId).HasMaxLength(50);
 
-                entity.Property(e => e.OrderSellerId)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
                 entity.HasOne(d => d.OrderBuyer)
-                    .WithMany(p => p.OrderOrderBuyer)
+                    .WithMany(p => p.Order)
                     .HasForeignKey(d => d.OrderBuyerId)
                     .HasConstraintName("OrderBuyer_BusinessUser");
 
@@ -242,35 +235,39 @@ namespace web.Data
                     .WithMany(p => p.Order)
                     .HasForeignKey(d => d.OrderGuestBuyerId)
                     .HasConstraintName("OrderGuestBuyer_GuestUser");
-
-                entity.HasOne(d => d.OrderSeller)
-                    .WithMany(p => p.OrderOrderSeller)
-                    .HasForeignKey(d => d.OrderSellerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("OrderSeller_BusinessUser");
             });
 
             modelBuilder.Entity<OrderItem>(entity =>
             {
                 entity.HasIndex(e => e.OrderItemOrderId)
-                    .HasName("OrderId");
+                    .HasName("OrderItem_Order");
+
+                entity.HasIndex(e => e.OrderItemProductId)
+                    .HasName("OrderItem_Product_idx");
 
                 entity.Property(e => e.OrderItemId).HasMaxLength(50);
 
-                entity.Property(e => e.OrderItemOrderId).HasMaxLength(50);
+                entity.Property(e => e.OrderItemOrderId)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.OrderItemProductId)
+                    .IsRequired()
+                    .HasMaxLength(45);
 
                 entity.Property(e => e.OrderItemQuantity).HasColumnType("int(11)");
-
-                entity.HasOne(d => d.OrderItemNavigation)
-                    .WithOne(p => p.OrderItem)
-                    .HasForeignKey<OrderItem>(d => d.OrderItemId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("OrderItem_ibfk_2");
 
                 entity.HasOne(d => d.OrderItemOrder)
                     .WithMany(p => p.OrderItem)
                     .HasForeignKey(d => d.OrderItemOrderId)
-                    .HasConstraintName("OrderItem_ibfk_1");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("OrderItem_Order");
+
+                entity.HasOne(d => d.OrderItemProduct)
+                    .WithMany(p => p.OrderItem)
+                    .HasForeignKey(d => d.OrderItemProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("OrderItem_Product");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -318,14 +315,10 @@ namespace web.Data
 
             modelBuilder.Entity<ShoppingCartItem>(entity =>
             {
-                entity.HasIndex(e => e.ProductId)
-                    .HasName("ProductId");
+                entity.HasIndex(e => e.ShoppingCartItemProductId)
+                    .HasName("ShoppingCartItem_Product");
 
                 entity.Property(e => e.ShoppingCartItemId).HasMaxLength(50);
-
-                entity.Property(e => e.ProductId)
-                    .IsRequired()
-                    .HasMaxLength(50);
 
                 entity.Property(e => e.ShoppingCartId)
                     .IsRequired()
@@ -333,11 +326,15 @@ namespace web.Data
 
                 entity.Property(e => e.ShoppingCartItemAmount).HasColumnType("int(11)");
 
-                entity.HasOne(d => d.Product)
+                entity.Property(e => e.ShoppingCartItemProductId)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.ShoppingCartItemProduct)
                     .WithMany(p => p.ShoppingCartItem)
-                    .HasForeignKey(d => d.ProductId)
+                    .HasForeignKey(d => d.ShoppingCartItemProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("ShoppingCartItem_ibfk_1");
+                    .HasConstraintName("ShoppingCartItem_Product");
             });
 
             modelBuilder.Entity<UserType>(entity =>

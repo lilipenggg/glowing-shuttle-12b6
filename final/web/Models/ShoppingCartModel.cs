@@ -23,6 +23,7 @@ namespace web.Models
         }
         
         public string ShoppingCartId { get; set; }
+        
         public List<ShoppingCartItem> ShoppingCartItems { get; set; }
 
         public static ShoppingCartModel GetCart(IServiceProvider services)
@@ -42,15 +43,15 @@ namespace web.Models
         {
             var shoppingCartItem =
                 await _context.ShoppingCartItem.SingleOrDefaultAsync(
-                    s => s.Product.ProductId == product.ProductId && s.ShoppingCartId == ShoppingCartId);
+                    s => s.ShoppingCartItemProduct.ProductId == product.ProductId && s.ShoppingCartId == ShoppingCartId);
 
             if (shoppingCartItem == null)
             {
                 shoppingCartItem = new ShoppingCartItem
                 {
                     ShoppingCartId = ShoppingCartId,
-                    Product = product,
-                    ProductId = product.ProductId,
+                    ShoppingCartItemProduct = product,
+                    ShoppingCartItemProductId = product.ProductId,
                     ShoppingCartItemAmount = 1
                 };
 
@@ -67,7 +68,7 @@ namespace web.Models
         public async Task<int> RemoveFromCart(Product product)
         {
             var shoppingCartItem = await _context.ShoppingCartItem.SingleOrDefaultAsync(
-                s => s.Product.ProductId == product.ProductId && s.ShoppingCartId == ShoppingCartId);
+                s => s.ShoppingCartItemProduct.ProductId == product.ProductId && s.ShoppingCartId == ShoppingCartId);
 
             var localAmount = 0;
 
@@ -94,7 +95,7 @@ namespace web.Models
             return ShoppingCartItems ??
                    (ShoppingCartItems = await _context.ShoppingCartItem
                        .Where(c => c.ShoppingCartId == ShoppingCartId)
-                       .Include(s => s.Product)
+                       .Include(s => s.ShoppingCartItemProduct)
                        .ToListAsync());
         }
 
@@ -112,6 +113,7 @@ namespace web.Models
         public async Task<double> GetShoppingCartTotal()
         {
             var shoppingCartItems = await _context.ShoppingCartItem
+                    .Include(c => c.ShoppingCartItemProduct)
                     .Where(c => c.ShoppingCartId == ShoppingCartId)
                     .ToListAsync();
 
@@ -119,7 +121,7 @@ namespace web.Models
             if (shoppingCartItems.Count != 0)
             {
                 total = shoppingCartItems
-                    .Select(c => c.Product.ProductUnitPrice * c.ShoppingCartItemAmount)
+                    .Select(c => c.ShoppingCartItemProduct.ProductUnitPrice * c.ShoppingCartItemAmount)
                     .Sum();
             }
 

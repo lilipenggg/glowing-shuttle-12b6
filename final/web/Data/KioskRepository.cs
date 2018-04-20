@@ -1,20 +1,24 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 using web.Services;
 using web.Data.Entities;
+using web.Models;
 
 namespace web.Data
 {
     public class KioskRepository : IKioskRepository
     {
         private readonly KioskContext _ctx;
+        private readonly ShoppingCartModel _shoppingCart;
 
-        public KioskRepository(KioskContext ctx)
+        public KioskRepository(KioskContext ctx, ShoppingCartModel shoppingCart)
         {
             _ctx = ctx;
+            _shoppingCart = shoppingCart;
         }
 
         #region Product
@@ -69,6 +73,29 @@ namespace web.Data
         }
         
         #endregion
+        
+        #region OrderItem
+
+        public async Task CreateOrderItems(Order order)
+        {
+            var shoppingCartItems = _shoppingCart.ShoppingCartItems;
+            foreach (var item in shoppingCartItems)
+            {
+                var orderItem = new OrderItem
+                {
+                    OrderItemId = new Guid().ToString(),
+                    OrderItemOrderId = order.OrderId,
+                    OrderItemQuantity = item.ShoppingCartItemAmount,
+                    OrderItemProductId = item.ShoppingCartItemProductId
+                };
+
+                _ctx.Add(orderItem);
+            }
+
+            await _ctx.SaveChangesAsync();
+        }
+        
+        #endregion
 
         #region Order
         
@@ -81,7 +108,34 @@ namespace web.Data
 
         public async Task<Order> GetOrderById(string id)
         {
-            return await _ctx.Order.SingleOrDefaultAsync(o => o.OrderId == id);
+            return await _ctx.Order.Include(o => o.OrderItem).SingleOrDefaultAsync(o => o.OrderId == id);
+        }
+
+        public async Task CreateOrder(OrderModel orderModel)
+        {
+            var order = new Order
+            {
+                OrderId = new Guid().ToString(), // Generate GUID for Id
+                OrderAppliedAwardPoints = orderModel.OrderAppliedAwardPoints,
+                OrderAppliedDiscount = orderModel.OrderAppliedDiscount,
+                OrderDateTime = orderModel.OrderDateTime,
+                OrderTotal = orderModel.OrderTotal
+            };
+
+            // Capture the items within shopping cart -- should be from OrderItem related data access methods
+            await CreateOrderItems(order);
+
+            // Capture order buyer (application user) id
+            if (orderModel.OrderBuyerId != null)
+            {
+                order.OrderBuyerId = orderModel.OrderBuyerId;
+            }
+            else if (orderModel.OrderGuestBuyerId != null)
+            {
+                order.OrderGuestBuyerId = orderModel.OrderGuestBuyerId;
+            }
+
+            await _ctx.SaveChangesAsync();
         }
 
         #endregion

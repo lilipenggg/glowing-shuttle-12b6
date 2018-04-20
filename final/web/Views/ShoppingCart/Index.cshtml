@@ -18,10 +18,10 @@
     {
         <tr>
             <td class="text-center">@line.ShoppingCartItemAmount</td>
-            <td class="text-left">@line.Product.ProductName</td>
-            <td class="text-right">@line.Product.ProductUnitPrice.ToString()</td>
+            <td class="text-left">@line.ShoppingCartItemProduct.ProductName</td>
+            <td class="text-right">@line.ShoppingCartItemProduct.ProductUnitPrice.ToString()</td>
             <td class="text-right">
-                @((line.ShoppingCartItemAmount * line.Product.ProductUnitPrice).ToString("c"))
+                @((line.ShoppingCartItemAmount * line.ShoppingCartItemProduct.ProductUnitPrice).ToString("c"))
             </td>
         </tr>
     }
@@ -35,3 +35,7 @@
     </tr>
     </tfoot>
 </table>
+
+<div class="text-center">
+    <a class="btn btn-primary" asp-controller="Order" asp-action="Checkout">Proceed to Checkout</a>
+</div>

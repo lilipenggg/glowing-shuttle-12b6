@@ -12,7 +12,7 @@ namespace web.Data.Entities
 
         public string CreditCardId { get; set; }
         public string CreditCardFirstName { get; set; }
-        public string CreditCartLastName { get; set; }
+        public string CreditCardLastName { get; set; }
         public DateTime CreditCardExpirationDate { get; set; }
         public string CreditCardNumber { get; set; }
         public int CreditCardCvv { get; set; }
