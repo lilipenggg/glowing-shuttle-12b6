@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace web.Models
 {
@@ -7,18 +9,35 @@ namespace web.Models
     {
         public CreditCardModel()
         {
-            BusinessUser = new HashSet<BusinessUserModel>();
+            ApplicationUser  = new HashSet<ApplicationUserModel>();
+            Order = new HashSet<OrderModel>();
         }
-
-        public string CreditCardId { get; set; }
+        
+        [Required(ErrorMessage = "Please enter the first name on credit card")]
+        [StringLength(45)]
+        [Display(Name = "First Name")]
         public string CreditCardFirstName { get; set; }
-        public string CreditCardLastName { get; set; }
-        public DateTime CreditCardExpirationDate { get; set; }
-        public string CreditCardNumber { get; set; }
-        public int CreditCardCvv { get; set; }
-        public string CreditCardUserId { get; set; }
+        
+        [Required(ErrorMessage = "Please enter the last name on credit card")]
 
-        public GuestUserModel GuestUser { get; set; }
-        public ICollection<BusinessUserModel> BusinessUser { get; set; }
+        [Display(Name = "Last Name")]
+        public string CreditCardLastName { get; set; }
+        
+        [Required(ErrorMessage = "Please enter the expiration date on credit card")]
+        [Display(Name = "Expiration Date")]
+        public DateTime CreditCardExpirationDate { get; set; }
+        
+        [Required(ErrorMessage = "Please enter credit card number")]
+        [Display(Name = "Credit Card Number")]
+        [StringLength(50)]
+        public string CreditCardNumber { get; set; }
+        
+        [Required(ErrorMessage = "Please enter credit card CVV")]
+        [Display(Name = "CVV")]
+        [StringLength(3)]
+        public int CreditCardCvv { get; set; }
+        
+        public ICollection<ApplicationUserModel> ApplicationUser { get; set; }
+        public ICollection<OrderModel> Order { get; set; }
     }
 }
