@@ -1,142 +1,159 @@
-﻿@model OrderViewModel
+﻿@model web.Models.OrderModel
 
 <form asp-action="Checkout" method="post" class="form-horizontal" role="form">
     <h4>You're just one step away from taking items in your shopping cart home!</h4>
+    
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="form-group">
-        <label asp-for="User.UserLastName" class="col-md-2 control-label"></label>
+        <label asp-for="OrderShippingLastName" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserLastName" class="form-control" />
-            <span asp-validation-for="User.UserLastName" class="text-danger"></span>
+            <input asp-for="OrderShippingLastName" class="form-control" />
+            <span asp-validation-for="OrderShippingLastName" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group">
-        <label asp-for="User.UserFirstName" class="col-md-2 control-label"></label>
+        <label asp-for="OrderShippingFirstName" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserFirstName" class="form-control" />
-            <span asp-validation-for="User.UserFirstName" class="text-danger"></span>
+            <input asp-for="OrderShippingFirstName" class="form-control" />
+            <span asp-validation-for="OrderShippingFirstName" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group">
-        <label asp-for="User.UserShippingAddress" class="col-md-2 control-label"></label>
+        <label asp-for="OrderShippingAddress1" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserShippingAddress" class="form-control" />
-            <span asp-validation-for="User.UserShippingAddress" class="text-danger"></span>
+            <input asp-for="OrderShippingAddress1" class="form-control" />
+            <span asp-validation-for="OrderShippingAddress1" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group">
-        <label asp-for="User.UserShippingAddress2" class="col-md-2 control-label"></label>
+        <label asp-for="OrderShippingAddress2" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserShippingAddress2" class="form-control" />
-            <span asp-validation-for="User.UserShippingAddress2" class="text-danger"></span>
+            <input asp-for="OrderShippingAddress2" class="form-control" />
+            <span asp-validation-for="OrderShippingAddress2" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group">
-        <label asp-for="User.UserShippingCity" class="col-md-2 control-label"></label>
+        <label asp-for="OrderShippingCity" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserShippingCity" class="form-control" />
-            <span asp-validation-for="User.UserShippingCity" class="text-danger"></span>
+            <input asp-for="OrderShippingCity" class="form-control" />
+            <span asp-validation-for="OrderShippingCity" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group">
-        <label asp-for="User.UserShippingState" class="col-md-2 control-label"></label>
+        <label asp-for="OrderShippingState" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserShippingState" class="form-control" />
-            <span asp-validation-for="User.UserShippingState" class="text-danger"></span>
+            <input asp-for="OrderShippingState" class="form-control" />
+            <span asp-validation-for="OrderShippingState" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group">
-        <label asp-for="User.UserShippingZipCode" class="col-md-2 control-label"></label>
+        <label asp-for="OrderShippingZipcode" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserShippingZipCode" class="form-control" />
-            <span asp-validation-for="User.UserShippingZipCode" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="User.UserCreditCard.CreditCardNumber" class="col-md-2 control-label"></label>
-        <div class="col-md-5">
-            <input asp-for="User.UserCreditCard.CreditCardNumber" class="form-control" />
-            <span asp-validation-for="User.UserCreditCard.CreditCardNumber" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="User.UserCreditCard.CreditCardExpirationDate" class="col-md-2 control-label"></label>
-        <div class="col-md-5">
-            <input asp-for="User.UserCreditCard.CreditCardExpirationDate" class="form-control" />
-            <span asp-validation-for="User.UserCreditCard.CreditCardExpirationDate" class="text-danger"></span>
+            <input asp-for="OrderShippingZipcode" class="form-control" />
+            <span asp-validation-for="OrderShippingZipcode" class="text-danger"></span>
         </div>
     </div>
     
     <div class="form-group">
-        <label asp-for="User.UserCreditCard.CreditCardCvv" class="col-md-2 control-label"></label>
+        <label asp-for="OrderAppliedAwardPoints" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserCreditCard.CreditCardCvv" class="form-control" />
-            <span asp-validation-for="User.UserCreditCard.CreditCardCvv" class="text-danger"></span>
+            <input asp-for="OrderAppliedAwardPoints" class="form-control" />
+            <span asp-validation-for="OrderAppliedAwardPoints" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="OrderAppliedDiscount" class="col-md-2 control-label"></label>
+        <div class="col-md-5">
+            <input asp-for="OrderAppliedDiscount" class="form-control" />
+            <span asp-validation-for="OrderAppliedDiscount" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="OrderCreditCard.CreditCardNumber" class="col-md-2 control-label"></label>
+        <div class="col-md-5">
+            <input asp-for="OrderCreditCard.CreditCardNumber" class="form-control" />
+            <span asp-validation-for="OrderCreditCard.CreditCardNumber" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="OrderCreditCard.CreditCardExpirationDate" class="col-md-2 control-label"></label>
+        <div class="col-md-5">
+            <input asp-for="OrderCreditCard.CreditCardExpirationDate" class="form-control" />
+            <span asp-validation-for="OrderCreditCard.CreditCardExpirationDate" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="OrderCreditCard.CreditCardCvv" class="col-md-2 control-label"></label>
+        <div class="col-md-5">
+            <input asp-for="OrderCreditCard.CreditCardCvv" class="form-control" />
+            <span asp-validation-for="OrderCreditCard.CreditCardCvv" class="text-danger"></span>
         </div>
     </div>
      
     <div class="form-group">
-        <label asp-for="User.UserCreditCard.CreditCardFirstName" class="col-md-2 control-label"></label>
+        <label asp-for="OrderCreditCard.CreditCardFirstName" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserCreditCard.CreditCardFirstName" class="form-control" />
-            <span asp-validation-for="User.UserCreditCard.CreditCardFirstName" class="text-danger"></span>
+            <input asp-for="OrderCreditCard.CreditCardFirstName" class="form-control" />
+            <span asp-validation-for="OrderCreditCard.CreditCardFirstName" class="text-danger"></span>
         </div>
     </div>
     
     <div class="form-group">
-        <label asp-for="User.UserCreditCard.CreditCardLastName" class="col-md-2 control-label"></label>
+        <label asp-for="OrderCreditCard.CreditCardLastName" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserCreditCard.CreditCardLastName" class="form-control" />
-            <span asp-validation-for="User.UserCreditCard.CreditCardLastName" class="text-danger"></span>
+            <input asp-for="OrderCreditCard.CreditCardLastName" class="form-control" />
+            <span asp-validation-for="OrderCreditCard.CreditCardLastName" class="text-danger"></span>
         </div>
     </div>
     
     <div class="form-group">
-        <label asp-for="User.UserBillingAddress" class="col-md-2 control-label"></label>
+        <label asp-for="OrderBillingAddress1" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserBillingAddress" class="form-control" />
-            <span asp-validation-for="User.UserBillingAddress" class="text-danger"></span>
+            <input asp-for="OrderBillingAddress1" class="form-control" />
+            <span asp-validation-for="OrderBillingAddress1" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group">
-        <label asp-for="User.UserBillingAddress2" class="col-md-2 control-label"></label>
+        <label asp-for="OrderBillingAddress2" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserBillingAddress2" class="form-control" />
-            <span asp-validation-for="User.UserBillingAddress2" class="text-danger"></span>
+            <input asp-for="OrderBillingAddress2" class="form-control" />
+            <span asp-validation-for="OrderBillingAddress2" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group">
-        <label asp-for="User.UserBillingCity" class="col-md-2 control-label"></label>
+        <label asp-for="OrderBillingCity" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserBillingCity" class="form-control" />
-            <span asp-validation-for="User.UserBillingCity" class="text-danger"></span>
+            <input asp-for="OrderBillingCity" class="form-control" />
+            <span asp-validation-for="OrderBillingCity" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group">
-        <label asp-for="User.UserBillingState" class="col-md-2 control-label"></label>
+        <label asp-for="OrderBillingState" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserBillingState" class="form-control" />
-            <span asp-validation-for="User.UserBillingState" class="text-danger"></span>
+            <input asp-for="OrderBillingState" class="form-control" />
+            <span asp-validation-for="OrderBillingState" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group">
-        <label asp-for="User.UserBillingZipCode" class="col-md-2 control-label"></label>
+        <label asp-for="OrderBillingZipCode" class="col-md-2 control-label"></label>
         <div class="col-md-5">
-            <input asp-for="User.UserBillingZipCode" class="form-control" />
-            <span asp-validation-for="User.UserBillingZipCode" class="text-danger"></span>
+            <input asp-for="OrderBillingZipCode" class="form-control" />
+            <span asp-validation-for="OrderBillingZipCode" class="text-danger"></span>
         </div>
     </div>
 
