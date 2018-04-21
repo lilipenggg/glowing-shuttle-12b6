@@ -1,11 +1,13 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using web.Data.Entities;
 
 namespace web.Data
 {
-    public partial class KioskContext : DbContext
+    public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public virtual DbSet<ApplicationUser> ApplicationUser { get; set; }
         public virtual DbSet<Category> Category { get; set; }
@@ -16,13 +18,15 @@ namespace web.Data
         public virtual DbSet<ShoppingCartItem> ShoppingCartItem { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
 
-        public KioskContext(DbContextOptions<Data.KioskContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<Data.ApplicationDbContext> options) : base(options)
         {
             
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+            
             modelBuilder.Entity<ApplicationUser>(entity =>
             {
                 entity.HasIndex(e => e.ApplicationUserCreditCardId)

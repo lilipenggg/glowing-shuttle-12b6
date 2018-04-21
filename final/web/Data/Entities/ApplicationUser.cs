@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace web.Data.Entities
 {
-    public partial class ApplicationUser
+    public partial class ApplicationUser : IdentityUser
     {
         public ApplicationUser()
         {

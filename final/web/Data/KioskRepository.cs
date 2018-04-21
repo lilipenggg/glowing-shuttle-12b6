@@ -14,10 +14,10 @@ namespace web.Data
 {
     public class KioskRepository : IKioskRepository
     {
-        private readonly KioskContext _ctx;
+        private readonly ApplicationDbContext _ctx;
         private readonly ShoppingCartModel _shoppingCart;
 
-        public KioskRepository(KioskContext ctx, ShoppingCartModel shoppingCart)
+        public KioskRepository(ApplicationDbContext ctx, ShoppingCartModel shoppingCart)
         {
             _ctx = ctx;
             _shoppingCart = shoppingCart;
