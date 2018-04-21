@@ -38,8 +38,8 @@ namespace web.Controllers
 
             if (ModelState.IsValid)
             {
-                // create the order
-                await _repository.CreateOrder(orderModel);
+                // create order and associated order items
+                await _repository.CreateOrder(orderModel, items);
 
                 await _shoppingCart.CleanCart();
                 return RedirectToAction("CheckoutComplete");

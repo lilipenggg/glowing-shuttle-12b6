@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 using web.Services;
@@ -81,6 +82,26 @@ namespace web.Data
         {
             return await _ctx.OrderItem.Include(oi => oi.OrderItemOrderId == orderId).ToListAsync();
         }
+
+        public async Task CreateOrderItems(List<ShoppingCartItem> shoppingCartItems, Order order)
+        {
+            List<OrderItem> orderItems = new List<OrderItem>();
+            foreach (var item in shoppingCartItems)
+            {
+                var orderItem = new OrderItem
+                {
+                    OrderItemId = Guid.NewGuid().ToString(),
+                    OrderItemOrder = order,
+                    OrderItemQuantity = item.ShoppingCartItemAmount,
+                    OrderItemProductId = item.ShoppingCartItemProductId
+                };
+
+                orderItems.Add(orderItem);
+            }
+            
+            _ctx.AddRange(orderItems);
+            await _ctx.SaveChangesAsync();
+        }
         
         #endregion
 
@@ -98,31 +119,19 @@ namespace web.Data
             return await _ctx.Order.Include(o => o.OrderItem).SingleOrDefaultAsync(o => o.OrderId == id);
         }
 
-        public async Task CreateOrder(OrderModel orderModel)
+        public async Task CreateOrder(OrderModel orderModel, List<ShoppingCartItem> shoppingCartItems)
         {
-            string orderId = new Guid().ToString();
-            var shoppingCartItems = await _shoppingCart.GetShoppingCartItems();
-            _shoppingCart.ShoppingCartItems = shoppingCartItems;
-            
-            List<OrderItem> orderItems = new List<OrderItem>();
-            foreach (var item in shoppingCartItems)
-            {
-                var orderItem = new OrderItem
-                {
-                    OrderItemId = new Guid().ToString(),
-                    OrderItemOrderId = orderId,
-                    OrderItemQuantity = item.ShoppingCartItemAmount,
-                    OrderItemProductId = item.ShoppingCartItemProductId
-                };
-
-                orderItems.Add(orderItem);
-            }
-
             var orderTotal = await _shoppingCart.GetShoppingCartTotal();
             
-            _ctx.Add(new Order
+            // create credit card entry
+            var creditCard = await CreateCreditCard(orderModel.OrderCreditCard.CreditCardCvv,
+                orderModel.OrderCreditCard.CreditCardExpirationDate,
+                orderModel.OrderCreditCard.CreditCardFirstName, orderModel.OrderCreditCard.CreditCardLastName,
+                orderModel.OrderCreditCard.CreditCardNumber);
+            
+            // create order
+            Order order = new Order
             {
-                OrderId = orderId,
                 OrderDateTime = DateTime.Now,
                 OrderAppliedAwardPoints = orderModel.OrderAppliedAwardPoints,
                 OrderAppliedDiscount = orderModel.OrderAppliedDiscount,
@@ -133,15 +142,7 @@ namespace web.Data
                 OrderBillingLastName = orderModel.OrderBillingLastName,
                 OrderBillingState = orderModel.OrderBillingState,
                 OrderBillingZipCode = orderModel.OrderBillingZipCode,
-                OrderCreditCard = new CreditCard
-                {
-                    CreditCardCvv = orderModel.OrderCreditCard.CreditCardCvv,
-                    CreditCardExpirationDate = orderModel.OrderCreditCard.CreditCardExpirationDate,
-                    CreditCardFirstName = orderModel.OrderCreditCard.CreditCardFirstName,
-                    CreditCardLastName = orderModel.OrderCreditCard.CreditCardLastName,
-                    CreditCardId = new Guid().ToString(),
-                    CreditCardNumber = orderModel.OrderCreditCard.CreditCardNumber
-                },
+                OrderCreditCard = creditCard,
                 OrderShippingAddress1 = orderModel.OrderShippingAddress1,
                 OrderShippingAddress2 = orderModel.OrderShippingAddress2,
                 OrderShippingCity = orderModel.OrderShippingCity,
@@ -149,11 +150,14 @@ namespace web.Data
                 OrderShippingLastName = orderModel.OrderShippingLastName,
                 OrderShippingState = orderModel.OrderShippingState,
                 OrderShippingZipCode = orderModel.OrderShippingZipCode,
-                OrderItem = orderItems,
                 OrderTotal = orderTotal
-            });
+            };
 
+            _ctx.Order.Add(order);
             await _ctx.SaveChangesAsync();
+            
+            // create assoicated order items
+            await CreateOrderItems(shoppingCartItems, order);
         }
 
         #endregion
@@ -174,9 +178,31 @@ namespace web.Data
 
         #region CreditCard
 
+        public async Task<CreditCard> GetCreditCardById(string id)
+        {
+            return await _ctx.CreditCard.SingleOrDefaultAsync(c => c.CreditCardId == id);
+        }
+
         public async Task<CreditCard> GetCreditCardByCardNumber(string cardNumber)
         {
             return await _ctx.CreditCard.SingleOrDefaultAsync(c => c.CreditCardNumber == cardNumber);
+        }
+
+        public async Task<CreditCard> CreateCreditCard(int cvv, DateTime expirationDate, string firstName, string lastName, string cardNumber)
+        {
+            CreditCard creditCard = new CreditCard
+            {
+                CreditCardCvv = cvv,
+                CreditCardExpirationDate = expirationDate,
+                CreditCardFirstName = firstName,
+                CreditCardLastName = lastName,
+                CreditCardNumber = cardNumber
+            };
+            
+            _ctx.Add(creditCard);
+            await _ctx.SaveChangesAsync();
+
+            return creditCard;
         }
 
         #endregion
