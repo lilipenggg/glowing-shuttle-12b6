@@ -8,20 +8,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using web.Data.Entities;
+using web.Models;
+using web.Services;
 
 namespace web.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly UserManager<Data.Entities.ApplicationUser> _userManager; // contains all apis that manage users in the database
-        private readonly SignInManager<Data.Entities.ApplicationUser> _signInManager; // contains all apis that allow users to sign in log off etc
+        private readonly UserManager<Data.Entities.ApplicationUser> _userManager;
+        private readonly SignInManager<Data.Entities.ApplicationUser> _signInManager;
+        private readonly IKioskRepository _repository;
 
         public AccountController(UserManager<Data.Entities.ApplicationUser> userManager,
-            SignInManager<Data.Entities.ApplicationUser> signInManager)
+            SignInManager<Data.Entities.ApplicationUser> signInManager, IKioskRepository repository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _repository = repository;
         }
 
         [AllowAnonymous]
@@ -59,11 +64,57 @@ namespace web.Controllers
         }
 
 
-        public IActionResult Register()
-        {
-            return View();
+        public async Task<IActionResult> Register()
+        {   
+            var userTypes = await _repository.GetUserTypes();
+            var model = new RegisterViewModel
+            {
+                ApplicationUser = new ApplicationUserModel(),
+                UserTypes = userTypes.Where(ut => ut.UserTypeName != "KioskEmployee")
+                    .Select(ut => new UserTypeModel
+                    {
+                        UserTypeId = ut.UserTypeId,
+                        UserTypeName = ut.UserTypeName
+                    }).OrderBy(ut => ut.UserTypeName).ToList()
+            };
+            
+            return View(model);
         }
 
+        public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+        {
+            var applicationUserModel = registerViewModel.ApplicationUser;
+            
+            if (ModelState.IsValid)
+            {
+                var user = new Data.Entities.ApplicationUser()
+                {
+                    ApplicationUserId = Guid.NewGuid().ToString(),
+                    ApplicationUserAwardPoints = 0,
+                    ApplicationUserEmail = applicationUserModel.ApplicationUserEmail,
+                    ApplicationUserFirstName = applicationUserModel.ApplicationUserFirstName,
+                    ApplicationUserLastName = applicationUserModel.ApplicationUserLastName,
+                    ApplicationUserType = new UserType
+                    {
+                        UserTypeId = applicationUserModel.ApplicationUserType.UserTypeId,
+                        UserTypeName = applicationUserModel.ApplicationUserType.UserTypeName
+                    },
+                    ApplicationUserPhoneNumber = applicationUserModel.ApplicationUserPhoneNumber,
+                    Email = applicationUserModel.ApplicationUserEmail   
+                };
+
+                var result = await _userManager.CreateAsync(user, applicationUserModel.ApplicationUserPassword);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+
+            return View(registerViewModel);
+        }
+
+        /*
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(LoginViewModel loginViewModel)
@@ -79,7 +130,7 @@ namespace web.Controllers
                 }
             }
             return View(loginViewModel);
-        }
+        }*/
 
         [HttpPost]
         public async Task<IActionResult> Logout()

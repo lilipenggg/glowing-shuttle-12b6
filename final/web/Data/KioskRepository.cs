@@ -176,6 +176,15 @@ namespace web.Data
 
         #endregion
 
+        #region UserType
+
+        public async Task<List<UserType>> GetUserTypes()
+        {
+            return await _ctx.UserType.OrderBy(ut => ut.UserTypeName).ToListAsync();
+        }
+
+        #endregion
+
         #region CreditCard
 
         public async Task<CreditCard> GetCreditCardById(string id)

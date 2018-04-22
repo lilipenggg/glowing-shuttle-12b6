@@ -1,4 +1,5 @@
-﻿@model LoginViewModel
+﻿@using web.Data.Entities
+@model RegisterViewModel
 
 <h2>Sign up now at Kiosk's Fair. Unlock our membership benefits!</h2>
 <form asp-controller="Account" asp-action="Register" method="post" class="form-horizontal" role="form">
@@ -6,17 +7,44 @@
     <hr />
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
-        <label asp-for="UserName" class="col-md-2 control-label"></label>
+        <label asp-for="ApplicationUser.ApplicationUserFirstName" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input asp-for="UserName" class="form-control" />
-            <span asp-validation-for="UserName" class="text-danger"></span>
+            <input asp-for="ApplicationUser.ApplicationUserFirstName" class="form-control" />
+            <span asp-validation-for="ApplicationUser.ApplicationUserFirstName" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
-        <label asp-for="Password" class="col-md-2 control-label"></label>
+        <label asp-for="ApplicationUser.ApplicationUserLastName" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input asp-for="Password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
+            <input asp-for="ApplicationUser.ApplicationUserLastName" class="form-control" />
+            <span asp-validation-for="ApplicationUser.ApplicationUserLastName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="ApplicationUser.ApplicationUserEmail" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="ApplicationUser.ApplicationUserEmail" class="form-control" />
+            <span asp-validation-for="ApplicationUser.ApplicationUserEmail" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="ApplicationUser.ApplicationUserPhoneNumber" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="ApplicationUser.ApplicationUserPhoneNumber" class="form-control" />
+            <span asp-validation-for="ApplicationUser.ApplicationUserPhoneNumber" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="ApplicationUser.ApplicationUserType" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.ApplicationUser.ApplicationUserType, new SelectList(Model.UserTypes));
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="ApplicationUser.ApplicationUserPassword" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="ApplicationUser.ApplicationUserPassword" class="form-control" />
+            <span asp-validation-for="ApplicationUser.ApplicationUserPassword" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">

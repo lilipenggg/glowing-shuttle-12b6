@@ -26,5 +26,7 @@ namespace web.Services
 
         Task<CreditCard> CreateCreditCard(int cvv, DateTime expirationDate, string firstName, string lastName,
             string cardNumber);
+
+        Task<List<UserType>> GetUserTypes();
     }
 }
