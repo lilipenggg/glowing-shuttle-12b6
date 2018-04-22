@@ -63,7 +63,7 @@ namespace web.Controllers
             return View(loginViewModel);
         }
 
-
+        [AllowAnonymous]
         public async Task<IActionResult> Register()
         {   
             var userTypes = await _repository.GetUserTypes();
@@ -81,6 +81,7 @@ namespace web.Controllers
             return View(model);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
             var applicationUserModel = registerViewModel.ApplicationUser;

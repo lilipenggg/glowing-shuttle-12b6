@@ -37,7 +37,7 @@
     <div class="form-group">
         <label asp-for="ApplicationUser.ApplicationUserType" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.ApplicationUser.ApplicationUserType, new SelectList(Model.UserTypes));
+            @Html.DropDownListFor(m => m.ApplicationUser.ApplicationUserType, new SelectList(Model.UserTypes.Select(u => u.UserTypeName)))
         </div>
     </div>
     <div class="form-group">
