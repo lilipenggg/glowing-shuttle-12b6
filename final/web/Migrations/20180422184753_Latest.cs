@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace web.Migrations
 {
-    public partial class Identity : Migration
+    public partial class Latest : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -52,18 +52,6 @@ namespace web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserType",
-                columns: table => new
-                {
-                    UserTypeId = table.Column<string>(maxLength: 50, nullable: false),
-                    UserTypeName = table.Column<string>(maxLength: 255, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserType", x => x.UserTypeId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -94,11 +82,8 @@ namespace web.Migrations
                     ApplicationUserCreditCardId = table.Column<string>(maxLength: 50, nullable: true),
                     ApplicationUserEmail = table.Column<string>(maxLength: 250, nullable: false),
                     ApplicationUserFirstName = table.Column<string>(maxLength: 30, nullable: false),
-                    ApplicationUserId = table.Column<string>(maxLength: 50, nullable: true),
                     ApplicationUserLastName = table.Column<string>(maxLength: 30, nullable: false),
-                    ApplicationUserPassword = table.Column<string>(maxLength: 100, nullable: false),
                     ApplicationUserPhoneNumber = table.Column<string>(maxLength: 45, nullable: true),
-                    ApplicationUserTypeId = table.Column<string>(maxLength: 50, nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
@@ -121,12 +106,6 @@ namespace web.Migrations
                         column: x => x.ApplicationUserCreditCardId,
                         principalTable: "CreditCard",
                         principalColumn: "CreditCardId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "ApplicationUserTypeId_UserType",
-                        column: x => x.ApplicationUserTypeId,
-                        principalTable: "UserType",
-                        principalColumn: "UserTypeId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -367,11 +346,6 @@ namespace web.Migrations
                 column: "ApplicationUserCreditCardId");
 
             migrationBuilder.CreateIndex(
-                name: "ApplicationUserType_UserType_idx",
-                table: "AspNetUsers",
-                column: "ApplicationUserTypeId");
-
-            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
@@ -464,9 +438,6 @@ namespace web.Migrations
 
             migrationBuilder.DropTable(
                 name: "CreditCard");
-
-            migrationBuilder.DropTable(
-                name: "UserType");
         }
     }
 }

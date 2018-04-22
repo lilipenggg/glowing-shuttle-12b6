@@ -16,7 +16,6 @@ namespace web.Data
         public virtual DbSet<OrderItem> OrderItem { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ShoppingCartItem> ShoppingCartItem { get; set; }
-        public virtual DbSet<UserType> UserType { get; set; }
 
         public ApplicationDbContext(DbContextOptions<Data.ApplicationDbContext> options) : base(options)
         {
@@ -31,11 +30,6 @@ namespace web.Data
             {
                 entity.HasIndex(e => e.ApplicationUserCreditCardId)
                     .HasName("ApplicationUser_CreditCard_idx");
-
-                entity.HasIndex(e => e.ApplicationUserTypeId)
-                    .HasName("ApplicationUserType_UserType_idx");
-
-                entity.Property(e => e.ApplicationUserId).HasMaxLength(50);
 
                 entity.Property(e => e.ApplicationUserAwardPoints).HasColumnType("int(11)");
 
@@ -53,26 +47,12 @@ namespace web.Data
                     .IsRequired()
                     .HasMaxLength(30);
 
-                entity.Property(e => e.ApplicationUserPassword)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
                 entity.Property(e => e.ApplicationUserPhoneNumber).HasMaxLength(45);
-
-                entity.Property(e => e.ApplicationUserTypeId)
-                    .IsRequired()
-                    .HasMaxLength(50);
 
                 entity.HasOne(d => d.ApplicationUserCreditCard)
                     .WithMany(p => p.ApplicationUser)
                     .HasForeignKey(d => d.ApplicationUserCreditCardId)
                     .HasConstraintName("ApplicationUser_CreditCard");
-
-                entity.HasOne(d => d.ApplicationUserType)
-                    .WithMany(p => p.ApplicationUser)
-                    .HasForeignKey(d => d.ApplicationUserTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("ApplicationUserTypeId_UserType");
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -282,15 +262,6 @@ namespace web.Data
                     .HasForeignKey(d => d.ShoppingCartItemProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("ShoppingCartItem_Product");
-            });
-
-            modelBuilder.Entity<UserType>(entity =>
-            {
-                entity.Property(e => e.UserTypeId).HasMaxLength(50);
-
-                entity.Property(e => e.UserTypeName)
-                    .IsRequired()
-                    .HasMaxLength(255);
             });
         }
     }

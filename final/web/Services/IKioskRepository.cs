@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using web.Data;
 using web.Data.Entities;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace web.Services
 {
@@ -27,6 +28,6 @@ namespace web.Services
         Task<CreditCard> CreateCreditCard(int cvv, DateTime expirationDate, string firstName, string lastName,
             string cardNumber);
 
-        Task<List<UserType>> GetUserTypes();
+        Task<List<IdentityRole>> GetAllRoles();
     }
 }

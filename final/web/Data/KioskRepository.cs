@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 using web.Services;
@@ -16,11 +17,13 @@ namespace web.Data
     {
         private readonly ApplicationDbContext _ctx;
         private readonly ShoppingCartModel _shoppingCart;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public KioskRepository(ApplicationDbContext ctx, ShoppingCartModel shoppingCart)
+        public KioskRepository(ApplicationDbContext ctx, ShoppingCartModel shoppingCart, RoleManager<IdentityRole> roleManager)
         {
             _ctx = ctx;
             _shoppingCart = shoppingCart;
+            _roleManager = roleManager;
         }
 
         #region Product
@@ -169,20 +172,6 @@ namespace web.Data
             return await _ctx.ApplicationUser.SingleOrDefaultAsync(a => a.ApplicationUserEmail == email);
         }
 
-        public async Task<List<ApplicationUser>> GetApplicationUsers()
-        {
-            return await _ctx.ApplicationUser.OrderBy(a => a.ApplicationUserId).ToListAsync();
-        }
-
-        #endregion
-
-        #region UserType
-
-        public async Task<List<UserType>> GetUserTypes()
-        {
-            return await _ctx.UserType.OrderBy(ut => ut.UserTypeName).ToListAsync();
-        }
-
         #endregion
 
         #region CreditCard
@@ -212,6 +201,14 @@ namespace web.Data
             await _ctx.SaveChangesAsync();
 
             return creditCard;
+        }
+        #endregion
+
+        #region ApplicationUserTypes
+
+        public async Task<List<IdentityRole>> GetAllRoles()
+        {
+            return await _roleManager.Roles.OrderBy(r => r.Name).ToListAsync();
         }
 
         #endregion

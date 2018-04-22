@@ -148,23 +148,12 @@ namespace web.Migrations
                         .IsRequired()
                         .HasMaxLength(30);
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasMaxLength(50);
-
                     b.Property<string>("ApplicationUserLastName")
                         .IsRequired()
                         .HasMaxLength(30);
 
-                    b.Property<string>("ApplicationUserPassword")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
                     b.Property<string>("ApplicationUserPhoneNumber")
                         .HasMaxLength(45);
-
-                    b.Property<string>("ApplicationUserTypeId")
-                        .IsRequired()
-                        .HasMaxLength(50);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -201,9 +190,6 @@ namespace web.Migrations
 
                     b.HasIndex("ApplicationUserCreditCardId")
                         .HasName("ApplicationUser_CreditCard_idx");
-
-                    b.HasIndex("ApplicationUserTypeId")
-                        .HasName("ApplicationUserType_UserType_idx");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -443,21 +429,6 @@ namespace web.Migrations
                     b.ToTable("ShoppingCartItem");
                 });
 
-            modelBuilder.Entity("web.Data.Entities.UserType", b =>
-                {
-                    b.Property<string>("UserTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("UserTypeName")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.HasKey("UserTypeId");
-
-                    b.ToTable("UserType");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -509,11 +480,6 @@ namespace web.Migrations
                         .WithMany("ApplicationUser")
                         .HasForeignKey("ApplicationUserCreditCardId")
                         .HasConstraintName("ApplicationUser_CreditCard");
-
-                    b.HasOne("web.Data.Entities.UserType", "ApplicationUserType")
-                        .WithMany("ApplicationUser")
-                        .HasForeignKey("ApplicationUserTypeId")
-                        .HasConstraintName("ApplicationUserTypeId_UserType");
                 });
 
             modelBuilder.Entity("web.Data.Entities.Order", b =>

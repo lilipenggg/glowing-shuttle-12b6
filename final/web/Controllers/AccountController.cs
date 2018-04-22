@@ -66,21 +66,25 @@ namespace web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register()
         {   
-            var userTypes = await _repository.GetUserTypes();
+            var roles = await _repository.GetAllRoles();
             var model = new RegisterViewModel
             {
                 ApplicationUser = new ApplicationUserModel(),
-                UserTypes = userTypes.Where(ut => ut.UserTypeName != "KioskEmployee")
-                    .Select(ut => new UserTypeModel
+                UserRoleModels = roles
+                    .Where(r => r.NormalizedName != "EMPLOYEE")
+                    .Select(r => new UserRoleModel
                     {
-                        UserTypeId = ut.UserTypeId,
-                        UserTypeName = ut.UserTypeName
-                    }).OrderBy(ut => ut.UserTypeName).ToList()
+                        UserRoleId = r.Id,
+                        UserRoleName = r.Name
+                    })
+                    .OrderBy(r => r.UserRoleName)
+                    .ToList()
             };
             
             return View(model);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
@@ -90,25 +94,27 @@ namespace web.Controllers
             {
                 var user = new Data.Entities.ApplicationUser()
                 {
-                    ApplicationUserId = Guid.NewGuid().ToString(),
+                    UserName = applicationUserModel.ApplicatinUserUserName,
                     ApplicationUserAwardPoints = 0,
                     ApplicationUserEmail = applicationUserModel.ApplicationUserEmail,
                     ApplicationUserFirstName = applicationUserModel.ApplicationUserFirstName,
                     ApplicationUserLastName = applicationUserModel.ApplicationUserLastName,
-                    ApplicationUserType = new UserType
-                    {
-                        UserTypeId = applicationUserModel.ApplicationUserType.UserTypeId,
-                        UserTypeName = applicationUserModel.ApplicationUserType.UserTypeName
-                    },
                     ApplicationUserPhoneNumber = applicationUserModel.ApplicationUserPhoneNumber,
-                    Email = applicationUserModel.ApplicationUserEmail   
+                    Email = applicationUserModel.ApplicationUserEmail
                 };
 
                 var result = await _userManager.CreateAsync(user, applicationUserModel.ApplicationUserPassword);
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    // assign the selected role the new user
+                    result = await _userManager.AddToRoleAsync(user,
+                        applicationUserModel.ApplicationUserRole.UserRoleName);
+                    
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
             }
 

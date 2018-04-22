@@ -7,13 +7,16 @@ namespace web.Models
 {
     public class ApplicationUserModel
     {
+        /*
         public ApplicationUserModel()
         {
             Order = new HashSet<OrderModel>();
             Product = new HashSet<ProductModel>();
-        }
-
-        public string ApplicationUserId { get; set; }
+        }*/
+        
+        [Required]
+        [Display(Name = "User Name")]
+        public string ApplicatinUserUserName { get; set; }
         
         [Required]
         [Display(Name = "First Name")]
@@ -38,18 +41,24 @@ namespace web.Models
         [Display(Name = "Password")]
         public string ApplicationUserPassword { get; set; }
         
-        public string ApplicationUserTypeId { get; set; }
-        
         [DataType(DataType.PhoneNumber)]
         [RegularExpression(@"\(?\d{3}\)?-? *\d{3}-? *-?\d{4}", ErrorMessage = "Phone numer is not in a valid format.")]
+        [Display(Name = "Phone Number")]
         public string ApplicationUserPhoneNumber { get; set; }
         
         public int? ApplicationUserAwardPoints { get; set; }
+        
+        /*
         public string ApplicationUserCreditCardId { get; set; }
 
-        public CreditCardModel ApplicationUserCreditCard { get; set; }
-        public UserTypeModel ApplicationUserType { get; set; }
+        public CreditCardModel ApplicationUserCreditCard { get; set; }*/
+        
+        [Required]
+        [Display(Name = "User Type")]
+        public UserRoleModel ApplicationUserRole { get; set; }
+        
+        /*
         public ICollection<OrderModel> Order { get; set; }
-        public ICollection<ProductModel> Product { get; set; }
+        public ICollection<ProductModel> Product { get; set; }*/
     }
 }
