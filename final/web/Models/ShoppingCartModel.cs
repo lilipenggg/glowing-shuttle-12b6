@@ -9,15 +9,14 @@ using web.Data;
 using web.Data.Entities;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using KioskContext = web.Data.KioskContext;
 
 namespace web.Models
 {
     public class ShoppingCartModel
     {
-        private readonly KioskContext _context;
+        private readonly ApplicationDbContext _context;
         
-        private ShoppingCartModel(KioskContext context)
+        private ShoppingCartModel(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -30,7 +29,7 @@ namespace web.Models
         {
             ISession session = services.GetRequiredService<IHttpContextAccessor>().HttpContext.Session;
 
-            var context = services.GetService<KioskContext>();
+            var context = services.GetService<ApplicationDbContext>();
             
             var cartId = session.GetString("CartId") ?? Guid.NewGuid().ToString();
             

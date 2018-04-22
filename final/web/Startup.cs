@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.AzureAppServices.Internal;
 using web.Controllers;
 using web.Data;
+using web.Data.Entities;
 using web.Models;
 using web.Services;
 
@@ -34,10 +36,14 @@ namespace web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<KioskContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
                 {
                     options.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
                 });
+
+            services.AddIdentity<Data.Entities.ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
             
             services.AddTransient<IMailService, NullMailService>(); // Need to support for real mail service
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -64,7 +70,9 @@ namespace web
             }
             
             app.UseSession();
-            // app.UseMvc();
+            app.UseStaticFiles();
+            app.UseAuthentication();
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -75,12 +83,6 @@ namespace web
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
-            });
-            app.UseStaticFiles();
-
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
             });
         }
     }
