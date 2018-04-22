@@ -3,11 +3,14 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 using web.Services;
 using web.Data.Entities;
+using web.Enums;
 using web.Models;
 using web.ViewModels;
 
@@ -18,13 +21,25 @@ namespace web.Data
         private readonly ApplicationDbContext _ctx;
         private readonly ShoppingCartModel _shoppingCart;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public KioskRepository(ApplicationDbContext ctx, ShoppingCartModel shoppingCart, RoleManager<IdentityRole> roleManager)
+        public KioskRepository(ApplicationDbContext ctx, ShoppingCartModel shoppingCart, 
+            RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             _ctx = ctx;
             _shoppingCart = shoppingCart;
             _roleManager = roleManager;
+            _userManager = userManager;
         }
+
+        #region ApplicationUser
+
+        public async Task<ApplicationUser> GetClaimsPrincipalApplicationUser(ClaimsPrincipal userClaimsPrincipal)
+        {
+            return await _userManager.GetUserAsync(userClaimsPrincipal);
+        }     
+
+        #endregion
 
         #region Product
         
@@ -33,9 +48,9 @@ namespace web.Data
             return await _ctx.Product.OrderBy(p => p.ProductName).ToListAsync();
         }
 
-        public async Task<Product> GetProductById(string id)
+        public async Task<Product> GetProductById(string productId)
         {
-            return await _ctx.Product.Include(p => p.ProductCategory).SingleOrDefaultAsync(p => p.ProductId == id);
+            return await _ctx.Product.Include(p => p.ProductCategory).SingleOrDefaultAsync(p => p.ProductId == productId);
         }
 
         public async Task<List<Product>> GetProductByCategory(string category)
@@ -45,6 +60,35 @@ namespace web.Data
                     select p)
                 .Include(x => x.ProductCategory)
                 .ToListAsync();
+        }
+
+        public async Task<List<Product>> GetProductByVendorId(string vendorId)
+        {
+            return await _ctx.Product.Where(p => p.ProductVendorId == vendorId).ToListAsync();
+        }
+
+        public async Task<QueryResult> CreateProduct(ProductModel productModel)
+        {
+            try
+            {
+                _ctx.Add(new Product
+                {
+                    ProductCategoryId = productModel.ProductCategory.CategoryId,
+                    ProductDescription = productModel.ProductDescription,
+                    ProductExpirationDate = productModel.ProductExpirationDate,
+                    ProductImage = productModel.ProductImage,
+                    ProductName = productModel.ProductName,
+                    ProductQuantity = productModel.ProductQuantity,
+                    ProductUnitPrice = productModel.ProductUnitPrice,
+                    ProductVendorId = productModel.ProductVendorId
+                });
+                await _ctx.SaveChangesAsync();
+                return QueryResult.Succeed;
+            }
+            catch (Exception e)
+            {
+                return QueryResult.Failed;
+            }   
         }
 
         #endregion
@@ -204,7 +248,7 @@ namespace web.Data
         }
         #endregion
 
-        #region ApplicationUserTypes
+        #region IdentityRole
 
         public async Task<List<IdentityRole>> GetAllRoles()
         {

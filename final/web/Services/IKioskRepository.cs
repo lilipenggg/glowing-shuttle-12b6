@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using web.Data;
 using web.Data.Entities;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using web.Enums;
 
 namespace web.Services
 {
     public interface IKioskRepository
     {
+        Task<ApplicationUser> GetClaimsPrincipalApplicationUser(ClaimsPrincipal userClaimsPrincipal);
+        
         Task<List<Product>> GetProducts();
-        Task<Product> GetProductById(string id);
+        Task<Product> GetProductById(string productId);
         Task<List<Product>> GetProductByCategory(string category);
+        Task<List<Product>> GetProductByVendorId(string vendorId);
+        
+        Task<QueryResult> CreateProduct(web.Models.ProductModel productModel);
 
         Task<List<Category>> GetCategories();
         Task<Category> GetCategoryById(string categoryId);

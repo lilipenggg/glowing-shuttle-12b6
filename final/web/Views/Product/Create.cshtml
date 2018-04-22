@@ -1,0 +1,59 @@
+﻿@model web.ViewModels.ProductManagementViewModel
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></button>
+        <h4 class="modal-title custom_align" id="Heading">Create Product</h4>
+    </div>
+    <div class="modal-body">
+        <form asp-action="Create" class="event-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="Product.ProductCategory.CategoryName" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <select asp-for="Product.ProductCategory.CategoryId">
+                        @foreach (var category in Model.Categories)
+                        {
+                            <option value="@category.CategoryId">@category.CategoryName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Product.ProductName" class="control-label">Name</label>
+                <input asp-for="Product.ProductName" class="form-control" />
+                <span asp-validation-for="Product.ProductName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.ProductQuantity" class="control-label">Quantity</label>
+                <input asp-for="Product.ProductQuantity" class="form-control"/>
+                <span asp-validation-for="Product.ProductQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.ProductUnitPrice" class="control-label">Unit Price</label>
+                <input asp-for="Product.ProductUnitPrice" class="form-control" />
+                <span asp-validation-for="Product.ProductUnitPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.ProductDescription" class="control-label">Description</label>
+                <input asp-for="Product.ProductDescription" class="form-control" height="50px"/>
+                <span asp-validation-for="Product.ProductDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.ProductImage" class="control-label">Image</label>
+                <input asp-for="Product.ProductImage" class="form-control" />
+                <span asp-validation-for="Product.ProductImage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.ProductExpirationDate" class="control-label">Expiration Date</label>
+                <input asp-for="Product.ProductExpirationDate" class="form-control" />
+                <span asp-validation-for="Product.ProductExpirationDate" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer ">
+        <button type="submit" onclick="document.getElementsByClassName('event-form')[0].submit()" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Create</button>
+    </div>
+</div>

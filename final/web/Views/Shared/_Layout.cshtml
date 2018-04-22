@@ -13,16 +13,7 @@
             <div class="navbar-brand"><i class="fa fa-shopping-bag"></i>    Kiosk Fair</div>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">&#9776;</button>
         </div>
-        <div id="menu" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
-                <li><a asp-controller="Home" asp-action="About">About</a></li>
-                @await Component.InvokeAsync("CategoryMenu")
-                @await Component.InvokeAsync("ShoppingCartSummary")
-            </ul>
-            @await Html.PartialAsync("LoginPartial")
-        </div>
+        @await Html.PartialAsync("NavigationPartial")
     </header>
 </div>
 

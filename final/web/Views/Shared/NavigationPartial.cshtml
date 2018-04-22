@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+@using web.Enums
+
+<div id="menu" class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+        <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+        <li><a asp-controller="Home" asp-action="About">About</a></li>
+        @if (User.Identity.IsAuthenticated)
+        {
+            if (User.IsInRole(RoleType.Customer.Value))
+            {
+                
+            }
+            else if (User.IsInRole(RoleType.Vendor.Value))
+            {
+                <li><a asp-controller="Product" asp-action="Index">Inventory</a></li>
+            }
+            else if (User.IsInRole(RoleType.Employee.Value))
+            {
+                
+            }
+        }
+        else
+        {
+            @await Component.InvokeAsync("CategoryMenu")
+            @await Component.InvokeAsync("ShoppingCartSummary")
+        }
+    </ul>
+    @await Html.PartialAsync("LoginPartial")
+</div>

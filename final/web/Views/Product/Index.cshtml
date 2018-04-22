@@ -1,0 +1,118 @@
+﻿@model List<web.Models.ProductModel>
+@{
+    ViewBag.Title = "Product Inventory";
+}
+
+<div class="container-fluid">
+    <p>
+        <button class="btn btn-default" onclick="CreateProduct()">Create New Product</button>
+    </p>
+    <table class="table table-responsive table-hover">
+        <thead>
+            <tr>
+                <th scope="row">
+                    Category
+                </th>
+                <th scope="row">
+                    Name
+                </th>
+                <th scope="row">
+                    Quantity
+                </th>
+                <th scope="row">
+                    Unit Price
+                </th>
+                <th scope="row">
+                    Description
+                </th>
+                <th scope="row">
+                    Image
+                </th>
+                <th scope="row">
+                    Expiration Date
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductCategory.CategoryName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductQuantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductUnitPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductImage)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductExpirationDate)
+                    </td>
+                    <td>
+                        <a class="btn btn-primary btn-xs" onclick="GetProduct('@product.ProductId')"><i class="glyphicon glyphicon-pencil"></i></a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger btn-xs" onclick="DeleteProduct('@product.ProductId')"><span class="glyphicon glyphicon-trash"></span></a>
+                    </td>
+                </tr>    
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div class="modal fade" id="product-edit-modal">
+    <div class="modal-dialog" id="product-edit-modal-dialog">
+    </div>
+</div>
+
+<div class="modal fade" id="product-delete-modal">
+    <div class="modal-dialog" id="product-delete-modal-dialog">
+    </div>
+</div>
+
+<div class="modal fade" id="product-create-modal">
+    <div class="modal-dialog" id="product-create-modal-dialog">
+    </div>
+</div>
+
+<script>
+    var GetProduct = function (productId) {
+        var url = "/Product/Edit/" + productId;
+
+        $("#product-edit-modal-dialog").load(url,
+            function() {
+                $("#product-edit-modal").modal("show");
+            });
+    }
+
+    var DeleteProduct = function (productId) {
+        var url = "/Product/Delete/" + productId;
+
+        $("#product-delete-modal-dialog").load(url,
+            function() {
+                $("#product-delete-modal").modal("show");
+            });
+    }
+
+    var CreateProduct = function () {
+        var url = "/Product/Create";
+
+        $("#product-create-modal-dialog").load(url,
+            function() {
+                $("#product-create-modal").modal("show");
+            });
+    }
+
+</script>
