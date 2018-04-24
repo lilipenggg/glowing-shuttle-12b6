@@ -32,15 +32,6 @@ namespace web.Data
             _userManager = userManager;
         }
 
-        #region ApplicationUser
-
-        public async Task<ApplicationUser> GetClaimsPrincipalApplicationUser(ClaimsPrincipal userClaimsPrincipal)
-        {
-            return await _userManager.GetUserAsync(userClaimsPrincipal);
-        }     
-
-        #endregion
-
         #region Product
         
         public async Task<List<Product>> GetProducts()
@@ -68,7 +59,6 @@ namespace web.Data
                     where p.ProductVendorId == vendorId
                     select p)
                 .ToListAsync();
-            //return await _ctx.Product.Where(p => p.ProductVendorId == vendorId).ToListAsync();
         }
 
         public async Task<List<Product>> GetProductByVendorName(string vendorName)
@@ -77,7 +67,7 @@ namespace web.Data
             return await _ctx.Product.Where(p => p.ProductVendorId == applicationUser.Id).Include(p => p.ProductCategory).ToListAsync();
         }
 
-        public async Task<QueryResult> CreateProduct(ProductModel productModel, string userName)
+        public async Task CreateProduct(ProductModel productModel, string userName)
         {
             var applicationUser = await GetApplicationUserByUserName(userName);
             
@@ -93,7 +83,31 @@ namespace web.Data
                 ProductVendorId = applicationUser.Id
             });
             await _ctx.SaveChangesAsync();
-            return QueryResult.Succeed; 
+        }
+
+        public async Task UpdateProduct(ProductModel productModel)
+        {   
+            _ctx.Update(new Product
+            {
+                ProductCategoryId = productModel.ProductCategoryId,
+                ProductDescription = productModel.ProductDescription,
+                ProductExpirationDate = productModel.ProductExpirationDate,
+                ProductImage = productModel.ProductImage,
+                ProductName = productModel.ProductName,
+                ProductQuantity = productModel.ProductQuantity,
+                ProductUnitPrice = productModel.ProductUnitPrice,
+                ProductVendorId = productModel.ProductVendorId,
+                ProductId = productModel.ProductId
+            });
+
+            await _ctx.SaveChangesAsync();
+        }
+
+        public async Task DeleteProduct(string productId)
+        {
+            var product = await GetProductById(productId);
+            _ctx.Product.Remove(product);
+            await _ctx.SaveChangesAsync();
         }
 
         #endregion

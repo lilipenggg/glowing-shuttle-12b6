@@ -11,15 +11,14 @@ namespace web.Services
 {
     public interface IKioskRepository
     {
-        Task<ApplicationUser> GetClaimsPrincipalApplicationUser(ClaimsPrincipal userClaimsPrincipal);
-        
         Task<List<Product>> GetProducts();
         Task<Product> GetProductById(string productId);
         Task<List<Product>> GetProductByCategory(string category);
         Task<List<Product>> GetProductByVendorId(string vendorId);
-        Task<List<Product>> GetProductByVendorName(string vendorName);
-        
-        Task<QueryResult> CreateProduct(web.Models.ProductModel productModel, string userName);
+        Task<List<Product>> GetProductByVendorName(string vendorName);   
+        Task CreateProduct(Models.ProductModel productModel, string userName);
+        Task UpdateProduct(Models.ProductModel productModel);
+        Task DeleteProduct(string productId);
 
         Task<List<Category>> GetCategories();
         Task<Category> GetCategoryById(string categoryId);
@@ -37,6 +36,8 @@ namespace web.Services
             string cardNumber);
 
         Task<List<IdentityRole>> GetAllRoles();
+
+        Task<ApplicationUser> GetApplicationUserByUserName(string userName);
 
     }
 }
