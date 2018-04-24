@@ -85,8 +85,9 @@ namespace web.Data
             await _ctx.SaveChangesAsync();
         }
 
-        public async Task UpdateProduct(ProductModel productModel)
+        public async Task UpdateProduct(ProductModel productModel, string userName)
         {   
+            var applicationUser = await GetApplicationUserByUserName(userName);
             _ctx.Update(new Product
             {
                 ProductCategoryId = productModel.ProductCategoryId,
@@ -96,7 +97,7 @@ namespace web.Data
                 ProductName = productModel.ProductName,
                 ProductQuantity = productModel.ProductQuantity,
                 ProductUnitPrice = productModel.ProductUnitPrice,
-                ProductVendorId = productModel.ProductVendorId,
+                ProductVendorId = applicationUser.Id,
                 ProductId = productModel.ProductId
             });
 

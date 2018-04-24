@@ -17,7 +17,7 @@ namespace web.Services
         Task<List<Product>> GetProductByVendorId(string vendorId);
         Task<List<Product>> GetProductByVendorName(string vendorName);   
         Task CreateProduct(Models.ProductModel productModel, string userName);
-        Task UpdateProduct(Models.ProductModel productModel);
+        Task UpdateProduct(Models.ProductModel productModel, string userName);
         Task DeleteProduct(string productId);
 
         Task<List<Category>> GetCategories();

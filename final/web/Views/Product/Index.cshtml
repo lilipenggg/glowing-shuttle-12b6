@@ -89,8 +89,8 @@
 
 <script>
     var GetProduct = function (productId) {
-        var url = "/Product/Edit/" + productId;
-
+        var url = "/Product/Edit/?productId=" + productId;
+        
         $("#product-edit-modal-dialog").load(url,
             function() {
                 $("#product-edit-modal").modal("show");
@@ -98,7 +98,7 @@
     }
 
     var DeleteProduct = function (productId) {
-        var url = "/Product/Delete/" + productId;
+        var url = "/Product/Delete/?productId=" + productId;
 
         $("#product-delete-modal-dialog").load(url,
             function() {

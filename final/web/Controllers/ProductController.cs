@@ -93,18 +93,18 @@ namespace web.Controllers
         /// <summary>
         /// Return a partial view of the details of the product for vendor to make modification
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="productId"></param>
         /// <returns></returns>
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(string productId)
         {
-            if (id == null)
+            if (productId == null)
             {
                 return NotFound();
             }
 
-            var product = await _repository.GetProductById(id);
+            var product = await _repository.GetProductById(productId);
             if (product == null)
             {
                 return NotFound();
@@ -146,32 +146,23 @@ namespace web.Controllers
         /// <summary>
         /// Collect the data that vendor has filled out in the Edit form and save them to database
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="productId"></param>
         /// <param name="productManagementViewModel"></param>
         /// <returns></returns>
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, ProductManagementViewModel productManagementViewModel)
+        public async Task<IActionResult> Edit(string productId, ProductManagementViewModel productManagementViewModel)
         {
             var product = productManagementViewModel.Product;
-            if (id != product.ProductId)
+            if (productId != product.ProductId)
             {
                 return NotFound();
-            }
-
-            var applicationUser = await _repository.GetApplicationUserByUserName(User.Identity.Name);
-            var existingProduct = await _repository.GetProductById(id);
-
-            // Not allow vendor who did not create the product to make the modification 
-            if (applicationUser.Id != existingProduct.ProductVendorId)
-            {
-                return NotFound("You're the authorized user to modify this item...");
             }
             
             if (ModelState.IsValid)
             {
-                await _repository.UpdateProduct(product);
+                await _repository.UpdateProduct(product, User.Identity.Name);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -181,18 +172,18 @@ namespace web.Controllers
         /// <summary>
         /// Return a partial view contains the information about this product with a Delete button
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="productId"></param>
         /// <returns></returns>
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string productId)
         {
-            if (id == null)
+            if (productId == null)
             {
                 return NotFound();
             }
 
-            var product = await _repository.GetProductById(id);
+            var product = await _repository.GetProductById(productId);
             if (product == null)
             {
                 return NotFound();
@@ -216,22 +207,22 @@ namespace web.Controllers
                 ProductVendorId = product.ProductVendorId
             };
 
-            return View(productModel);
+            return PartialView("Delete", productModel);
         }
 
         /// <summary>
         /// Query the database to perform the delete product action
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="productId"></param>
         /// <returns></returns>
         [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmation(string id)
+        public async Task<IActionResult> DeleteConfirmation(string productId)
         {
-            if (id == null)
+            if (productId == null)
             {
                 return NotFound();
             }
-            await _repository.DeleteProduct(id);
+            await _repository.DeleteProduct(productId);
             return RedirectToAction(nameof(Index));
         }
 
