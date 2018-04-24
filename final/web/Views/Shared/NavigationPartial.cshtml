@@ -26,6 +26,7 @@
         {
             @await Component.InvokeAsync("CategoryMenu")
             @await Component.InvokeAsync("ShoppingCartSummary")
+            <li><a asp-controller="ShoppingCart" asp-action="Index">Cart</a></li>
         }
     </ul>
     @await Html.PartialAsync("LoginPartial")

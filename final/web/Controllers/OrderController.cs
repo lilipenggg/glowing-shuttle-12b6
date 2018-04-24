@@ -53,5 +53,7 @@ namespace web.Controllers
             ViewBag.CheckoutCompleteMessage = "Thanks for your order. Your order will be processed shortly!";
             return View();
         }
+        
+        // need a different set of controller for loading a page that is different than the guest user
     }
 }

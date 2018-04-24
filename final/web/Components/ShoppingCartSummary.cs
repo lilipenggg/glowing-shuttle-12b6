@@ -19,7 +19,7 @@ namespace web.Components
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var items = await _shoppingCart.GetShoppingCartItems();
-            //var items = new List<ShoppingCartItem>() {new ShoppingCartItem(), new ShoppingCartItem()};
+            
             _shoppingCart.ShoppingCartItems = items;
 
             var shoppingCartViewModel = new ShoppingCartViewModel
