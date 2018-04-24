@@ -211,7 +211,7 @@ namespace web.Data
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.ProductDescription).HasMaxLength(300);
+                entity.Property(e => e.ProductDescription).HasMaxLength(600);
 
                 entity.Property(e => e.ProductExpirationDate).HasColumnType("datetime");
 

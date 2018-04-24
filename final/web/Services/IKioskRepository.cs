@@ -17,8 +17,9 @@ namespace web.Services
         Task<Product> GetProductById(string productId);
         Task<List<Product>> GetProductByCategory(string category);
         Task<List<Product>> GetProductByVendorId(string vendorId);
+        Task<List<Product>> GetProductByVendorName(string vendorName);
         
-        Task<QueryResult> CreateProduct(web.Models.ProductModel productModel);
+        Task<QueryResult> CreateProduct(web.Models.ProductModel productModel, string userName);
 
         Task<List<Category>> GetCategories();
         Task<Category> GetCategoryById(string categoryId);
@@ -36,5 +37,6 @@ namespace web.Services
             string cardNumber);
 
         Task<List<IdentityRole>> GetAllRoles();
+
     }
 }

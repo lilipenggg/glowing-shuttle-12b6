@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace web.Models
 {
@@ -12,7 +13,10 @@ namespace web.Models
 
         public string ProductId { get; set; }
         public string ProductName { get; set; }
+        
+        [StringLength(600)]
         public string ProductDescription { get; set; }
+        
         public string ProductImage { get; set; }
         public DateTime? ProductExpirationDate { get; set; }
         public double ProductUnitPrice { get; set; }

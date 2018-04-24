@@ -64,31 +64,36 @@ namespace web.Data
 
         public async Task<List<Product>> GetProductByVendorId(string vendorId)
         {
-            return await _ctx.Product.Where(p => p.ProductVendorId == vendorId).ToListAsync();
+            return await (from p in _ctx.Product
+                    where p.ProductVendorId == vendorId
+                    select p)
+                .ToListAsync();
+            //return await _ctx.Product.Where(p => p.ProductVendorId == vendorId).ToListAsync();
         }
 
-        public async Task<QueryResult> CreateProduct(ProductModel productModel)
+        public async Task<List<Product>> GetProductByVendorName(string vendorName)
         {
-            try
+            var applicationUser = await GetApplicationUserByUserName(vendorName);
+            return await _ctx.Product.Where(p => p.ProductVendorId == applicationUser.Id).Include(p => p.ProductCategory).ToListAsync();
+        }
+
+        public async Task<QueryResult> CreateProduct(ProductModel productModel, string userName)
+        {
+            var applicationUser = await GetApplicationUserByUserName(userName);
+            
+            _ctx.Add(new Product
             {
-                _ctx.Add(new Product
-                {
-                    ProductCategoryId = productModel.ProductCategory.CategoryId,
-                    ProductDescription = productModel.ProductDescription,
-                    ProductExpirationDate = productModel.ProductExpirationDate,
-                    ProductImage = productModel.ProductImage,
-                    ProductName = productModel.ProductName,
-                    ProductQuantity = productModel.ProductQuantity,
-                    ProductUnitPrice = productModel.ProductUnitPrice,
-                    ProductVendorId = productModel.ProductVendorId
-                });
-                await _ctx.SaveChangesAsync();
-                return QueryResult.Succeed;
-            }
-            catch (Exception e)
-            {
-                return QueryResult.Failed;
-            }   
+                ProductCategoryId = productModel.ProductCategoryId,
+                ProductDescription = productModel.ProductDescription,
+                ProductExpirationDate = productModel.ProductExpirationDate,
+                ProductImage = productModel.ProductImage,
+                ProductName = productModel.ProductName,
+                ProductQuantity = productModel.ProductQuantity,
+                ProductUnitPrice = productModel.ProductUnitPrice,
+                ProductVendorId = applicationUser.Id
+            });
+            await _ctx.SaveChangesAsync();
+            return QueryResult.Succeed; 
         }
 
         #endregion
@@ -214,6 +219,11 @@ namespace web.Data
         public async Task<ApplicationUser> GetApplicationUserByEmail(string email)
         {
             return await _ctx.ApplicationUser.SingleOrDefaultAsync(a => a.ApplicationUserEmail == email);
+        }
+
+        public async Task<ApplicationUser> GetApplicationUserByUserName(string userName)
+        {
+            return await _ctx.ApplicationUser.SingleOrDefaultAsync(a => a.UserName == userName);
         }
 
         #endregion

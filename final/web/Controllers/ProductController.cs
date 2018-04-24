@@ -27,8 +27,9 @@ namespace web.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var applicationUser = await _repository.GetClaimsPrincipalApplicationUser(HttpContext.User);
-            var products = (await _repository.GetProductByVendorId(applicationUser.Id)).Select(p => new ProductModel
+            var products = await _repository.GetProductByVendorName(User.Identity.Name);
+            
+            var productModels = products.Select(p => new ProductModel
             {
                 ProductId = p.ProductId,
                 ProductCategory = new CategoryModel
@@ -41,11 +42,10 @@ namespace web.Controllers
                 ProductImage = p.ProductImage,
                 ProductName = p.ProductName,
                 ProductQuantity = p.ProductQuantity,
-                ProductUnitPrice = p.ProductUnitPrice,
-                ProductVendorId = applicationUser.Id
+                ProductUnitPrice = p.ProductUnitPrice
             }).ToList();
 
-            return View(products);
+            return View(productModels);
         }
 
         /// <summary>
@@ -79,17 +79,12 @@ namespace web.Controllers
         public async Task<IActionResult> Create(ProductManagementViewModel productManagementViewModel)
         {
             var product = productManagementViewModel.Product;
-            var applicationUser = await _repository.GetClaimsPrincipalApplicationUser(HttpContext.User);
 
             if (ModelState.IsValid)
             {
-                product.ProductVendorId = applicationUser.Id;
-                var result = await _repository.CreateProduct(product);
+                await _repository.CreateProduct(product, User.Identity.Name);
 
-                if (result == QueryResult.Succeed)
-                {
-                    return RedirectToAction(nameof(Index));
-                }
+                return RedirectToAction(nameof(Index));
             }
 
             return View(productManagementViewModel);
@@ -98,7 +93,6 @@ namespace web.Controllers
         public async Task<ViewResult> List(string category)
         {
             var model = new ProductListViewModel();
-            //var productModels = new List<ProductModel>();
             List<web.Data.Entities.Product> products;
 
             model.ProductModels = new List<ProductModel>();
