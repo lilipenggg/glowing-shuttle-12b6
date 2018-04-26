@@ -45,10 +45,13 @@ namespace web
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
             
-            services.AddTransient<IMailService, NullMailService>(); // Need to support for real mail service
+            services.AddTransient<IMailService, EMailService>(); 
+            services.AddSingleton<IEmailConfiguration>(
+                Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
+            
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<ShoppingCartModel>(sp => ShoppingCartModel.GetCart(sp));
-            services.AddTransient<IKioskRepository, KioskRepository>(); // Be able to reuse the service without constructing it again and again
+            services.AddTransient<IKioskRepository, KioskRepository>(); 
             
             services.AddMvc();
 
@@ -79,6 +82,16 @@ namespace web
                     name: "categoryfilter",
                     template: "Product/{action}/{category?}",
                     defaults: new {Controller = "Product", action = "List"});
+                
+                routes.MapRoute(
+                    name: "statcountfilter",
+                    template: "Statistic/{action}/{count?}",
+                    defaults: new {Controller = "Statistic", action = "List"});
+                
+                routes.MapRoute(
+                    name: "emailcountfilter",
+                    template: "Email/{action}/{count?}",
+                    defaults: new {Controller = "Email", action = "Create"});
                 
                 routes.MapRoute(
                     name: "default",
