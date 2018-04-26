@@ -162,5 +162,61 @@ namespace web.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            var userModel = new ApplicationUserModel
+            {
+                ApplicatinUserUserName = user.UserName,
+                ApplicationUserAwardPoints = user.ApplicationUserAwardPoints,
+                ApplicationUserEmail = user.ApplicationUserEmail,
+                ApplicationUserFirstName = user.ApplicationUserFirstName,
+                ApplicationUserLastName = user.ApplicationUserLastName,
+                ApplicationUserPhoneNumber = user.ApplicationUserPhoneNumber
+            };
+            return View(userModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(string userName, ApplicationUserModel applicationUserModel)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            
+            if (ModelState.IsValid)
+            {
+                user.ApplicationUserFirstName = applicationUserModel.ApplicationUserFirstName;
+                user.ApplicationUserLastName = applicationUserModel.ApplicationUserLastName;
+                user.ApplicationUserEmail = applicationUserModel.ApplicationUserEmail;
+                user.ApplicationUserPhoneNumber = applicationUserModel.ApplicationUserPhoneNumber;
+                await _userManager.UpdateAsync(user);
+            }
+
+            return View(applicationUserModel);
+        }
+        
+        // TODO: Need to create one action that return a overview of the list of registered users
+        /*
+        public async Task<IActionResult> List()
+        {
+            return View();
+        }
+        
+        // TODO: Need to create one action HttpGet that return a Create User view
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            return View();
+        }
+        
+        // TODO: Need to create one action HttpPost that can process the creation of a user
+        // Might be able to reuse the database query that register a new user for this action
+        [HttpPost]
+        public async Task<IActionResult> Create(RegisterViewModel registerViewModel)
+        {
+            return View();
+        }
+        */
     }
 }

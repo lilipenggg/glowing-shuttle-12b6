@@ -58,10 +58,7 @@ namespace web.Controllers
             if (ModelState.IsValid)
             {
                 // Send the email
-                _mailService.SendMail("lilypenggg@gmail.com", contactViewModel.Subject,
-                    $"From: {contactViewModel.Name} {contactViewModel.Email}, Message: {contactViewModel.Message}");
-                ViewBag.UserMessage = "Mail Sent";
-                ModelState.Clear();
+                
             }
             else
             {
