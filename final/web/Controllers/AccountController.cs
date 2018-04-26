@@ -86,10 +86,11 @@ namespace web.Controllers
                 var result = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
                 if (result.Succeeded)
                 {
+                    // Redirect to the checkout page once the user signed in
                     if (string.IsNullOrEmpty(loginViewModel.ReturnUrl))
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("CheckoutSignedIn", "Order");
 
-                    return RedirectToAction("Index", "ShoppingCart");
+                    return RedirectToAction(loginViewModel.ReturnUrl);
                 }
             }
 
@@ -141,7 +142,7 @@ namespace web.Controllers
 
                 if (result.Succeeded)
                 {
-                    // assign the selected role the new user
+                    // Assign the selected role the new user
                     result = await _userManager.AddToRoleAsync(user,
                         applicationUserModel.ApplicationUserRole.UserRoleName);
                     

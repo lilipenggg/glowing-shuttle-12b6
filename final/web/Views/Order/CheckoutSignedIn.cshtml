@@ -67,9 +67,16 @@
     
     @if (User.Identity.IsAuthenticated && Model.ApplicationUser.ApplicationUserAwardPoints > 0)
     {
-        <div class=""></div>
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                Hi there, you currently have @Model.ApplicationUser.ApplicationUserAwardPoints award points
+            </div>
+            <div class="panel-body">
+                Every 30 award points can be used as $10 store credit, hurry up, earn more points by shopping with us (restriction applied)
+            </div>
+        </div>
         <div class="form-group">
-            <label asp-for="Order.OrderAppliedAwardPoints" class="col-md-2 control-label"></label>
+            <label asp-for="Order.OrderAppliedAwardPoints" class="col-md-2 control-label">Apply Award Points</label>
             <div class="col-md-5">
                 <input asp-for="Order.OrderAppliedAwardPoints" class="form-control" />
                 <span asp-validation-for="Order.OrderAppliedAwardPoints" class="text-danger"></span>
@@ -78,7 +85,7 @@
     }
     
     <div class="form-group">
-        <label asp-for="Order.OrderAppliedDiscount" class="col-md-2 control-label"></label>
+        <label asp-for="Order.OrderAppliedDiscount" class="col-md-2 control-label">Apply Promoted Discount</label>
         <div class="col-md-5">
             <input asp-for="Order.OrderAppliedDiscount" class="form-control" />
             <span asp-validation-for="Order.OrderAppliedDiscount" class="text-danger"></span>
@@ -131,7 +138,7 @@
     <br/>
     <hr/>
     
-    <h4>Credit Card Information</h4>
+    <h4>Billing Information</h4>
     <hr/>
     <div class="form-group">
         <label asp-for="Order.OrderBillingFirstName" class="col-md-2 control-label"></label>

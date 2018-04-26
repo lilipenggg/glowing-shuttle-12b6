@@ -21,9 +21,9 @@
         <tr>
             <td class="text-center">@line.ShoppingCartItemAmount</td>
             <td class="text-left">@line.ShoppingCartItemProduct.ProductName</td>
-            <td class="text-right">@line.ShoppingCartItemProduct.ProductUnitPrice.ToString()</td>
+            <td class="text-right">@line.ShoppingCartItemProduct.ProductUnitPrice.ToString("C")</td>
             <td class="text-right">
-                @((line.ShoppingCartItemAmount * line.ShoppingCartItemProduct.ProductUnitPrice).ToString("c"))
+                @((line.ShoppingCartItemAmount * line.ShoppingCartItemProduct.ProductUnitPrice).ToString("C"))
             </td>
         </tr>
     }
