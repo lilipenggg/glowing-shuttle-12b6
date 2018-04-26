@@ -1,0 +1,74 @@
+﻿@model EmailViewModel
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></button>
+        <h4 class="modal-title custom_align" id="Heading">Send Email</h4>
+    </div>
+    <div class="modal-body">
+        <form asp-action="Create" class="event-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="Email.EmailFromName" class="control-label">From Name</label>
+                <input asp-for="Email.EmailFromName" class="form-control" />
+                <span asp-validation-for="Email.EmailFromName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email.EmailFromAddress" class="control-label">From Email Address</label>
+                <input asp-for="Email.EmailFromAddress" class="form-control" />
+                <span asp-validation-for="Email.EmailFromAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">To</label>
+                <input class="form-control" readonly="readonly" 
+                       value="@{
+                                  foreach (var user in Model.Users)
+                                  {
+                                      Html.DisplayText(user.ApplicationUserEmail + ";");
+                                  }
+                              }">
+            </div>
+            <div class="form-group">
+                <label asp-for="Email.EmailSubject" class="control-label">Subject</label>
+                <input asp-for="Email.EmailSubject" class="form-control" />
+                <span asp-validation-for="Email.EmailSubject" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email.EmailBody" class="control-label">Content</label>
+                <textarea asp-for="Email.EmailBody" class="form-control" height="50px"></textarea>
+                <span asp-validation-for="Email.EmailBody" class="text-danger"></span>
+            </div>
+            <br/>
+            
+            <hr/>
+            <h5>SMTP Mail Server Setup</h5>
+            <hr/>
+            <div class="form-group">
+                <label asp-for="Email.EmailServer" class="control-label">SMTP Mail Server</label>
+                <input asp-for="Email.EmailServer" class="form-control" />
+                <span asp-validation-for="Email.EmailServer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email.EmailPort" class="control-label">SMTP Mail Server Port</label>
+                <input asp-for="Email.EmailPort" class="form-control" />
+                <span asp-validation-for="Email.EmailPort" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email.EmailUserName" class="control-label">Email Login Username</label>
+                <input asp-for="Email.EmailUserName" class="form-control" />
+                <span asp-validation-for="Email.EmailUserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email.EmailSenderPassword" class="control-label">Email Login Password</label>
+                <input asp-for="Email.EmailSenderPassword" class="form-control" />
+                <span asp-validation-for="Email.EmailSenderPassword" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Count" />
+            <input type="hidden" asp-for="Users" />
+        </form>
+    </div>
+    <div class="modal-footer ">
+        <button type="submit" onclick="document.getElementsByClassName('event-form')[0].submit()" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Send</button>
+    </div>
+</div>

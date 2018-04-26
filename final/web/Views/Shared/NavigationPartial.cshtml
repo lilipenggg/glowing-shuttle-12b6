@@ -17,6 +17,7 @@
             else if (User.IsInRole(RoleType.Vendor.Value))
             {
                 <li><a asp-controller="Product" asp-action="Index">Inventory</a></li>
+                @await Html.PartialAsync("StatisticMenuPartial")
             }
             else if (User.IsInRole(RoleType.Employee.Value))
             {

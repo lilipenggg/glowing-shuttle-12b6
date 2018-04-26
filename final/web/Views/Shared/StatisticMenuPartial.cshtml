@@ -1,0 +1,27 @@
+﻿<li class="dropdown">
+    <a asp-controller="Statistic"
+       asp-action="List"
+       class="dropdown-toggle" data-toggle="dropdown">Report<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <li>
+            <a asp-controller="Statistic" asp-action="List"
+               asp-route-count="5">Number of Purchases: 5</a>
+        </li>
+        <li>
+            <a asp-controller="Statistic" asp-action="List"
+               asp-route-count="10">Number of Purchases: 10</a>
+        </li>
+        <li>
+            <a asp-controller="Statistic" asp-action="List"
+               asp-route-count="20">Number of Purchases: 20</a>
+        </li>
+        <li>
+            <a asp-controller="Statistic" asp-action="List"
+               asp-route-count="25">Number of Purchases: 25</a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a asp-controller="Statistic" asp-action="List" asp-route-count="">View all purchases</a>
+        </li>
+    </ul>
+</li>

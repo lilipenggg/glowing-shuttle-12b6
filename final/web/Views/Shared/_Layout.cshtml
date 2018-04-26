@@ -10,7 +10,7 @@
 <div class="navbar navbar-inverse">
     <header class="container">
         <div class="navbar-header">
-            <div class="navbar-brand"><i class="fa fa-shopping-bag"></i>    Kiosk Fair</div>
+            <div class="navbar-brand"><a asp-action="Index" asp-controller="Home"><i class="fa fa-shopping-bag"></i>    Kiosk Fair</a></div>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">&#9776;</button>
         </div>
         @await Html.PartialAsync("NavigationPartial")
