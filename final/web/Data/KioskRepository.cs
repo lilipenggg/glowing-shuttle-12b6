@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Security.Cryptography.Xml;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Razor.Language;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 using web.Services;
@@ -145,6 +148,11 @@ namespace web.Data
         
         #region OrderItem
 
+        public async Task<List<OrderItem>> GetOrderItems()
+        {
+            return await _ctx.OrderItem.OrderBy(oi => oi.OrderItemId).ToListAsync();
+        }
+
         public async Task<List<OrderItem>> GetOrderItemsById(string orderId)
         {
             return await _ctx.OrderItem.Include(oi => oi.OrderItemOrderId == orderId).ToListAsync();
@@ -260,6 +268,12 @@ namespace web.Data
 
         #region ApplicationUser
 
+        public async Task<List<ApplicationUser>> GetApplicationUserByRole(string role)
+        {
+            var result = await _userManager.GetUsersInRoleAsync(role);
+            return new List<ApplicationUser>(result);
+        }
+
         public async Task<ApplicationUser> GetApplicationUserByEmail(string email)
         {
             return await _ctx.ApplicationUser.SingleOrDefaultAsync(a => a.ApplicationUserEmail == email);
@@ -276,6 +290,84 @@ namespace web.Data
             user.ApplicationUserAwardPoints = awardPoints;
             await _ctx.SaveChangesAsync();
         }
+        
+        /// <summary>
+        /// Get a list of customers that have bought a specific vendor's product within the last month
+        /// </summary>
+        /// <param name="vendorUserName">Vendor's username</param>
+        /// <param name="distinct">Return a list of distinct customers if true, otherwise not distinct</param>
+        /// <returns></returns>
+        public async Task<List<ApplicationUser>> GetApplicationUserPurchasedLastMonth(string vendorUserName, bool distinct)
+        {
+            // Retrieve the vendor user id
+            var vendorUser = await GetApplicationUserByUserName(vendorUserName);
+
+            var products = await GetProducts();
+            var orderItems = await GetOrderItems();
+            var orders = await GetOrders();
+            var users = await GetApplicationUserByRole(RoleType.Customer.Value);
+
+            var startDayOfThisMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            var firstDayLastMonth = startDayOfThisMonth.AddMonths(-1);
+            var lastDayLastMonth = startDayOfThisMonth.AddDays(-1);
+            
+            // Perform inner join to find out customers that have bought a vendor's product within the last month
+            List<ApplicationUser> customers;
+            if (!distinct)
+            {
+                customers = (from p in products
+                        join oi in orderItems on p.ProductId equals oi.OrderItemProductId
+                        join o in orders on oi.OrderItemOrderId equals o.OrderId
+                        join u in users on o.OrderCustomerId equals u.Id
+                        where p.ProductVendorId == vendorUser.Id &&
+                              o.OrderDateTime >= firstDayLastMonth &&
+                              o.OrderDateTime <= lastDayLastMonth
+                        select u)
+                    .ToList();
+            }
+            else
+            {
+                customers = (from p in products
+                        join oi in orderItems on p.ProductId equals oi.OrderItemProductId
+                        join o in orders on oi.OrderItemOrderId equals o.OrderId
+                        join u in users on o.OrderCustomerId equals u.Id
+                        where p.ProductVendorId == vendorUser.Id &&
+                              o.OrderDateTime >= firstDayLastMonth &&
+                              o.OrderDateTime <= lastDayLastMonth
+                        select u)
+                    .Distinct()
+                    .ToList();
+            }
+
+            return customers;
+        }
+        
+        /// <summary>
+        /// Get a list of customers who have purchased a specific vendor's product for a number of times within last month
+        /// </summary>
+        /// <param name="vendorUserName">the vendor name</param>
+        /// <param name="count">the number of times that the customers have made an purchase last month</param>
+        /// <returns></returns>
+        public async Task<List<ApplicationUser>> GetApplicationUserPurchasedNumOfTimes(string vendorUserName, int count)
+        {
+            var users = await GetApplicationUserPurchasedLastMonth(vendorUserName, false);
+            var customerCount = users.GroupBy(u => u.Id)
+                .Select(u => new
+                {
+                    UserId = u.Key,
+                    Count = u.Count()
+                })
+                .Where(u => u.Count == count);
+
+            var applicationUsers = new List<ApplicationUser>();
+            foreach (var c in customerCount)
+            {
+                applicationUsers.Add(await _userManager.FindByIdAsync(c.UserId));
+            }
+
+            return applicationUsers;
+        }
+        
 
         #endregion
 
