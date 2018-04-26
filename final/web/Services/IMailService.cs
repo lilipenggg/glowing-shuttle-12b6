@@ -1,7 +1,9 @@
-﻿namespace web.Services
+﻿using web.Models;
+
+namespace web.Services
 {
     public interface IMailService
     {
-        void SendMail(string to, string subject, string body);
+        void SendMail(EmailModel emailModel);
     }
 }
