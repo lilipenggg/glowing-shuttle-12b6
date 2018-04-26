@@ -9,6 +9,7 @@ using web.Data;
 using web.Data.Entities;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using web.Enums;
 
 namespace web.Models
 {
@@ -115,6 +116,25 @@ namespace web.Models
                     .Include(c => c.ShoppingCartItemProduct)
                     .Where(c => c.ShoppingCartId == ShoppingCartId)
                     .ToListAsync();
+
+            var total = 0.0;
+            if (shoppingCartItems.Count != 0)
+            {
+                total = shoppingCartItems
+                    .Select(c => c.ShoppingCartItemProduct.ProductUnitPrice * c.ShoppingCartItemAmount)
+                    .Sum();
+                total = total * (1 + TaxPercentage.Tax.Value);
+            }
+
+            return total;
+        }
+
+        public async Task<double> GetShoppingCartTotalBeforeTax()
+        {
+            var shoppingCartItems = await _context.ShoppingCartItem
+                .Include(c => c.ShoppingCartItemProduct)
+                .Where(c => c.ShoppingCartId == ShoppingCartId)
+                .ToListAsync();
 
             var total = 0.0;
             if (shoppingCartItems.Count != 0)

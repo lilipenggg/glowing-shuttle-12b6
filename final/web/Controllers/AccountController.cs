@@ -62,6 +62,40 @@ namespace web.Controllers
             ModelState.AddModelError("", "Username/password not found");
             return View(loginViewModel);
         }
+        
+        [AllowAnonymous]
+        public IActionResult LoginRedirect(string returnUrl)
+        {
+            return View(new LoginViewModel
+            {
+                ReturnUrl = returnUrl
+            });
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginRedirect(LoginViewModel loginViewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(loginViewModel);
+
+            var user = await _userManager.FindByNameAsync(loginViewModel.UserName);
+
+            if (user != null)
+            {
+                var result = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
+                if (result.Succeeded)
+                {
+                    if (string.IsNullOrEmpty(loginViewModel.ReturnUrl))
+                        return RedirectToAction("Index", "Home");
+
+                    return RedirectToAction("Index", "ShoppingCart");
+                }
+            }
+
+            ModelState.AddModelError("", "Username/password not found");
+            return View(loginViewModel);
+        }
 
         [AllowAnonymous]
         public async Task<IActionResult> Register()

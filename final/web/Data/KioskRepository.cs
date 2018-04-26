@@ -186,10 +186,8 @@ namespace web.Data
             return await _ctx.Order.Include(o => o.OrderItem).SingleOrDefaultAsync(o => o.OrderId == id);
         }
 
-        public async Task CreateOrder(OrderModel orderModel, List<ShoppingCartItem> shoppingCartItems)
-        {
-            var orderTotal = await _shoppingCart.GetShoppingCartTotal();
-            
+        public async Task CreateOrder(OrderModel orderModel, List<ShoppingCartItem> shoppingCartItems, string userName)
+        {   
             // create credit card entry
             var creditCard = await CreateCreditCard(orderModel.OrderCreditCard.CreditCardCvv,
                 orderModel.OrderCreditCard.CreditCardExpirationDate,
@@ -197,7 +195,7 @@ namespace web.Data
                 orderModel.OrderCreditCard.CreditCardNumber);
             
             // create order
-            Order order = new Order
+            var order = new Order
             {
                 OrderDateTime = DateTime.Now,
                 OrderAppliedAwardPoints = orderModel.OrderAppliedAwardPoints,
@@ -216,9 +214,40 @@ namespace web.Data
                 OrderShippingFirstName = orderModel.OrderShippingFirstName,
                 OrderShippingLastName = orderModel.OrderShippingLastName,
                 OrderShippingState = orderModel.OrderShippingState,
-                OrderShippingZipCode = orderModel.OrderShippingZipCode,
-                OrderTotal = orderTotal
+                OrderShippingZipCode = orderModel.OrderShippingZipCode
             };
+            
+            var orderTotal = await _shoppingCart.GetShoppingCartTotal();
+
+            if (userName != null)
+            {
+                var user = await GetApplicationUserByUserName(userName);
+                var points = user.ApplicationUserAwardPoints;
+                
+                // Update current user's award points - using order total before tax
+                var orderTotalBeforeTax = await _shoppingCart.GetShoppingCartTotalBeforeTax();
+                
+                // Update the order total based on the award points that is being applied
+                if (orderModel.OrderAppliedAwardPoints != 0)
+                {
+                    var credit = orderModel.OrderAppliedAwardPoints / 30 * 10;
+                    points = points - orderModel.OrderAppliedAwardPoints + orderModel.OrderAppliedAwardPoints % 30;
+
+                    // Apply the credit from award points to the order total before tax
+                    orderTotalBeforeTax -= credit;
+                    orderTotal *= 1 + TaxPercentage.Tax.Value;
+                    orderModel.OrderTotal = orderTotal;
+                }
+                
+                // Add in the collected award points based on the latest order total
+                points += (int) Math.Floor(orderTotalBeforeTax) * 3;
+                await UpdateApplicationUserAwardPoints(points, userName);
+                
+                // Associate customer with this order
+                order.OrderCustomerId = user.Id;
+            }
+
+            order.OrderTotal = orderTotal;
 
             _ctx.Order.Add(order);
             await _ctx.SaveChangesAsync();
@@ -239,6 +268,13 @@ namespace web.Data
         public async Task<ApplicationUser> GetApplicationUserByUserName(string userName)
         {
             return await _ctx.ApplicationUser.SingleOrDefaultAsync(a => a.UserName == userName);
+        }
+        
+        public async Task UpdateApplicationUserAwardPoints(int? awardPoints, string userName)
+        {
+            var user = await GetApplicationUserByUserName(userName);
+            user.ApplicationUserAwardPoints = awardPoints;
+            await _ctx.SaveChangesAsync();
         }
 
         #endregion

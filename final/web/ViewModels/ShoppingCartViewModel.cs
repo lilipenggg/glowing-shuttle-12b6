@@ -1,4 +1,5 @@
-﻿using web.Models;
+﻿using web.Enums;
+using web.Models;
 
 namespace web.ViewModels
 {
@@ -6,5 +7,6 @@ namespace web.ViewModels
     {
         public ShoppingCartModel ShoppingCart { get; set; }
         public double ShoppingCartTotal { get; set; }
+        public double TaxPercentage { get; set; }
     }
 }

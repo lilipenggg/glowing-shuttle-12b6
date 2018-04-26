@@ -14,9 +14,10 @@ namespace web.Models
         //public string OrderId { get; set; }
         // optional data fields - available to registered customers only
         public DateTime OrderDateTime { get; set; }
-        public int? OrderAppliedAwardPoints { get; set; }
-        public double? OrderAppliedDiscount { get; set; }
+        public int OrderAppliedAwardPoints { get; set; }
+        public double OrderAppliedDiscount { get; set; }
         public double OrderTotal { get; set; }
+        public int OrderAwardPoints { get; set; }
         
         [Required(ErrorMessage = "Please enter your shipping address")]
         [Display(Name = "Shipping Address Line 1")]

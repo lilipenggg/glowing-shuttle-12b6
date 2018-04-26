@@ -6,6 +6,7 @@ using web.Data.Entities;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using web.Enums;
+using web.Models;
 
 namespace web.Services
 {
@@ -30,7 +31,7 @@ namespace web.Services
         
         Task<List<Order>> GetOrders();
         Task<Order> GetOrderById(string id);
-        Task CreateOrder(web.Models.OrderModel orderModel, List<ShoppingCartItem> shoppingCartItems);
+        Task CreateOrder(OrderModel orderModel, List<ShoppingCartItem> shoppingCartItems, string userName);
 
         Task<CreditCard> CreateCreditCard(int cvv, DateTime expirationDate, string firstName, string lastName,
             string cardNumber);

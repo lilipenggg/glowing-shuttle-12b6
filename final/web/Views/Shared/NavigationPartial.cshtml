@@ -11,7 +11,8 @@
         {
             if (User.IsInRole(RoleType.Customer.Value))
             {
-                
+                @await Component.InvokeAsync("CategoryMenu")
+                @await Component.InvokeAsync("ShoppingCartSummary")
             }
             else if (User.IsInRole(RoleType.Vendor.Value))
             {
@@ -26,7 +27,6 @@
         {
             @await Component.InvokeAsync("CategoryMenu")
             @await Component.InvokeAsync("ShoppingCartSummary")
-            <li><a asp-controller="ShoppingCart" asp-action="Index">Cart</a></li>
         }
     </ul>
     @await Html.PartialAsync("LoginPartial")

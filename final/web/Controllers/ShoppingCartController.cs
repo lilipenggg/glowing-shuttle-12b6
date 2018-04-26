@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using web.Data;
+using web.Enums;
 using web.Models;
 using web.Services;
 using web.ViewModels;
@@ -27,7 +28,8 @@ namespace web.Controllers
             var shoppingCartViewModel = new ShoppingCartViewModel
             {
                 ShoppingCart = _shoppingCart,
-                ShoppingCartTotal = await _shoppingCart.GetShoppingCartTotal()
+                ShoppingCartTotal = await _shoppingCart.GetShoppingCartTotal(),
+                TaxPercentage = new TaxPercentage().Value
             };
 
             return View(shoppingCartViewModel);

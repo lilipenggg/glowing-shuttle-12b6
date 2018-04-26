@@ -30,9 +30,15 @@
     </tbody>
     <tfoot>
     <tr>
+        <td colspan="3" class="text-right">Tax Rate: </td>
+        <td class="text-right">
+            @String.Format("{0:P2}", Model.TaxPercentage)
+        </td>
+    </tr>
+    <tr>
         <td colspan="3" class="text-right">Total: </td>
         <td class="text-right">
-            @Model.ShoppingCartTotal.ToString("c")
+            @Model.ShoppingCartTotal.ToString("C")
         </td>
     </tr>
     </tfoot>
@@ -40,16 +46,14 @@
 
 @if (!User.Identity.IsAuthenticated)
 {
-    <div class="text-center">
-        <a class="btn btn-primary" asp-controller="Order" asp-action="Checkout">Checkout as a Guest</a>
-    </div>
-    <div class="text-center">
-        <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Sign In and Checkout</a>
+    <div class="text-right">
+        <a class="btn btn-primary text-center" asp-controller="Order" asp-action="Checkout">Checkout as a Guest</a>
+        <a class="btn btn-primary text-right" asp-controller="Account" asp-action="LoginRedirect">Sign In and Checkout</a>
     </div>
 }
 else
 {
-    <div class="text-center">
-        <a class="btn btn-primary" asp-controller="Order" asp-action="Checkout">Check out</a>
+    <div class="text-right">
+        <a class="btn btn-primary" asp-controller="Order" asp-action="CheckoutSignedIn">Check out</a>
     </div>
 }
