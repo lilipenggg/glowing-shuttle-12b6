@@ -5,7 +5,7 @@
 
 <div class="container-fluid">
     <p>
-        <button class="btn btn-default" onclick="SendEmail('@Model.NumOfPurchases')">Send Email</button>
+        <a asp-action="Create" asp-controller="Email" asp-route-count="@Model.NumOfPurchases"><button class="btn btn-default" @*onclick="SendEmail('@Model.NumOfPurchases')"*@>Send Email</button></a>
     </p>
     <table class="table table-responsive table-hover">
         <thead>
@@ -44,12 +44,6 @@
             }
         </tbody>
     </table>
-</div>
-
-
-<div class="modal fade" id="send-email-modal">
-    <div class="modal-dialog" id="send-email-modal-dialog">
-    </div>
 </div>
 
 <script>    

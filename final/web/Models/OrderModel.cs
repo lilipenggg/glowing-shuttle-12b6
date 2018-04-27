@@ -11,7 +11,7 @@ namespace web.Models
             OrderItem = new HashSet<OrderItemModel>();
         }
 
-        //public string OrderId { get; set; }
+        public string OrderId { get; set; }
         // optional data fields - available to registered customers only
         public DateTime OrderDateTime { get; set; }
         public int OrderAppliedAwardPoints { get; set; }

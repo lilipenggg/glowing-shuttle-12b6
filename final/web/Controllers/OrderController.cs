@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Razor.Language;
 using Microsoft.AspNetCore.Rewrite.Internal.UrlMatches;
 using web.Data.Entities;
+using web.Enums;
 using web.Models;
 using web.Services;
 using web.ViewModels;
@@ -143,6 +145,26 @@ namespace web.Controllers
             };
             
             return View(orderCheckoutViewModel);
+        }
+
+        public async Task<IActionResult> List()
+        {
+            if (!User.IsInRole(RoleType.Employee.Value))
+            {
+                return NotFound();
+            }
+            
+            var orderModels = (await _repository.GetOrders())
+                    .Select(o => new OrderModel
+                    {
+                        OrderId = o.OrderId,
+                        OrderAppliedAwardPoints = o.OrderAppliedAwardPoints ?? 0,
+                        OrderAppliedDiscount = o.OrderAppliedDiscount ?? 0.0,
+                        OrderDateTime = o.OrderDateTime,
+                        OrderTotal = o.OrderTotal ?? 0.0
+                    }).ToList();
+                
+            return View(orderModels);       
         }
     }
 }

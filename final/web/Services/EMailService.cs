@@ -34,11 +34,11 @@ namespace web.Services
             // Need to use what user send back to us when filling out the send email form for now
             using (var emailClient = new SmtpClient())
             {
-                emailClient.Connect(emailModel.EmailServer, emailModel.EmailPort, false);
+                emailClient.Connect(emailModel.EmailServer, emailModel.EmailPort, true);
  
                 emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
  
-                emailClient.Authenticate(emailModel.EmailUsername, emailModel.EmailSenderPassword);
+                emailClient.Authenticate(emailModel.EmailUserName, emailModel.EmailSenderPassword);
  
                 emailClient.Send(message);
  

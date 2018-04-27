@@ -28,7 +28,7 @@ namespace web.Models
         public int EmailPort { get; set; }
         
         [Required]
-        public string EmailUsername { get; set; }
+        public string EmailUserName { get; set; }
         
         [Required]
         public string EmailSenderPassword { get; set; }

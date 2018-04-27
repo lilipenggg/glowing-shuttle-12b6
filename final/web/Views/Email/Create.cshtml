@@ -1,74 +1,86 @@
 ﻿@model EmailViewModel
+@{
+    ViewBag.Title = "Send Email";
+}
 
-<div class="modal-content">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></button>
-        <h4 class="modal-title custom_align" id="Heading">Send Email</h4>
+<form asp-action="Create" method="post" class="form-horizontal" role="form">
+    <hr/>
+    <h5>Basic Email Information</h5>
+    <hr/>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Email.EmailFromName" class="col-md-2 control-label">From Name</label>
+        <div class="col-md-5">
+            <input asp-for="Email.EmailFromName" class="form-control"/>
+            <span asp-validation-for="Email.EmailFromName" class="text-danger"></span>
+        </div>
     </div>
-    <div class="modal-body">
-        <form asp-action="Create" class="event-form">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <div class="form-group">
-                <label asp-for="Email.EmailFromName" class="control-label">From Name</label>
-                <input asp-for="Email.EmailFromName" class="form-control" />
-                <span asp-validation-for="Email.EmailFromName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email.EmailFromAddress" class="control-label">From Email Address</label>
-                <input asp-for="Email.EmailFromAddress" class="form-control" />
-                <span asp-validation-for="Email.EmailFromAddress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">To</label>
-                <input class="form-control" readonly="readonly" 
-                       value="@{
-                                  foreach (var user in Model.Users)
-                                  {
-                                      Html.DisplayText(user.ApplicationUserEmail + ";");
-                                  }
-                              }">
-            </div>
-            <div class="form-group">
-                <label asp-for="Email.EmailSubject" class="control-label">Subject</label>
-                <input asp-for="Email.EmailSubject" class="form-control" />
-                <span asp-validation-for="Email.EmailSubject" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email.EmailBody" class="control-label">Content</label>
-                <textarea asp-for="Email.EmailBody" class="form-control" height="50px"></textarea>
-                <span asp-validation-for="Email.EmailBody" class="text-danger"></span>
-            </div>
-            <br/>
-            
-            <hr/>
-            <h5>SMTP Mail Server Setup</h5>
-            <hr/>
-            <div class="form-group">
-                <label asp-for="Email.EmailServer" class="control-label">SMTP Mail Server</label>
-                <input asp-for="Email.EmailServer" class="form-control" />
-                <span asp-validation-for="Email.EmailServer" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email.EmailPort" class="control-label">SMTP Mail Server Port</label>
-                <input asp-for="Email.EmailPort" class="form-control" />
-                <span asp-validation-for="Email.EmailPort" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email.EmailUserName" class="control-label">Email Login Username</label>
-                <input asp-for="Email.EmailUserName" class="form-control" />
-                <span asp-validation-for="Email.EmailUserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email.EmailSenderPassword" class="control-label">Email Login Password</label>
-                <input asp-for="Email.EmailSenderPassword" class="form-control" />
-                <span asp-validation-for="Email.EmailSenderPassword" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Count" />
-            <input type="hidden" asp-for="Users" />
-        </form>
+
+    <div class="form-group">
+        <label asp-for="Email.EmailFromAddress" class="col-md-2 control-label">From Email Address</label>
+        <div class="col-md-5">
+            <input asp-for="Email.EmailFromAddress" class="form-control"/>
+            <span asp-validation-for="Email.EmailFromAddress" class="text-danger"></span>
+        </div>
     </div>
-    <div class="modal-footer ">
-        <button type="submit" onclick="document.getElementsByClassName('event-form')[0].submit()" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Send</button>
+
+    <div class="form-group">
+        <label asp-for="Email.EmailSubject" class="col-md-2 control-label">Subject</label>
+        <div class="col-md-5">
+            <input asp-for="Email.EmailSubject" class="form-control"/>
+            <span asp-validation-for="Email.EmailSubject" class="text-danger"></span>
+        </div>
     </div>
-</div>
+
+    <div class="form-group">
+        <label asp-for="Email.EmailBody" class="col-md-2 control-label">Content</label>
+        <div class="col-md-5">
+            <input asp-for="Email.EmailBody" class="form-control"/>
+            <span asp-validation-for="Email.EmailBody" class="text-danger"></span>
+        </div>
+    </div>
+    <br/>
+
+    <hr/>
+    <h5>SMTP Mail Server Setup</h5>
+    <hr/>
+    <div class="form-group">
+        <label asp-for="Email.EmailServer" class="col-md-2 control-label">Server Address</label>
+        <div class="col-md-5">
+            <input asp-for="Email.EmailServer" class="form-control"/>
+            <span asp-validation-for="Email.EmailServer" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email.EmailPort" class="col-md-2 control-label">Server Port</label>
+        <div class="col-md-5">
+            <input asp-for="Email.EmailPort" class="form-control"/>
+            <span asp-validation-for="Email.EmailPort" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="Email.EmailUserName" class="col-md-2 control-label">Authentication Username</label>
+        <div class="col-md-5">
+            <input asp-for="Email.EmailUserName" class="form-control"/>
+            <span asp-validation-for="Email.EmailUserName" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="Email.EmailSenderPassword" class="col-md-2 control-label">Authentication Password</label>
+        <div class="col-md-5">
+            <input asp-for="Email.EmailSenderPassword" class="form-control"/>
+            <span asp-validation-for="Email.EmailSenderPassword" class="text-danger"></span>
+        </div>
+    </div>
+    <hr/>
+    <input type="hidden" asp-for="Count" />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-5">
+            <input type="submit" class="btn btn-primary" value="Send Email"/>
+        </div>
+    </div>
+    <br/>
+</form>

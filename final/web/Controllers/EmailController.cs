@@ -30,10 +30,23 @@ namespace web.Controllers
         [HttpGet]
         public async Task<IActionResult> Create(string count)
         {
+            var model = new EmailViewModel
+            {
+                Email = new EmailModel(),
+                Count = count
+            };
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(EmailViewModel emailViewModel)
+        {
+            var count = emailViewModel.Count;
             List<ApplicationUser> users;
             if (string.IsNullOrEmpty(count))
             {
-                users = await _repository.GetApplicationUserPurchasedLastMonth(User.Identity.Name, false);
+                users = await _repository.GetApplicationUserPurchasedLastMonth(User.Identity.Name);
             }
             else
             {
@@ -52,24 +65,17 @@ namespace web.Controllers
                 ApplicationUserPhoneNumber = u.ApplicationUserPhoneNumber
             }).ToList();
 
-            var model = new EmailViewModel
-            {
-                Email = new EmailModel(),
-                Users = userModels,
-                Count = count
-            };
+            emailViewModel.Email.Customers = userModels;
             
-            return PartialView("Create", model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(EmailViewModel emailViewModel)
-        {
             try
             {
                 if (ModelState.IsValid)
                 {
                     _mailService.SendMail(emailViewModel.Email);
+                }
+                else
+                {
+                    return View(emailViewModel);
                 }
 
                 return RedirectToAction("List", "Statistic", new {count = emailViewModel.Count});

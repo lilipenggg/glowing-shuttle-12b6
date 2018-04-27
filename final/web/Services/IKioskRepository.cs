@@ -39,8 +39,9 @@ namespace web.Services
         Task<List<IdentityRole>> GetAllRoles();
 
         Task<ApplicationUser> GetApplicationUserByUserName(string userName);
-        Task<List<ApplicationUser>> GetApplicationUserPurchasedLastMonth(string vendorUserName, bool distinct);
+        Task<List<ApplicationUser>> GetApplicationUserPurchasedLastMonth(string vendorUserName);
         Task<List<ApplicationUser>> GetApplicationUserPurchasedNumOfTimes(string vendorUserName, int count);
+        Task<List<ApplicationUser>> GetApplicationUsers();
 
     }
 }

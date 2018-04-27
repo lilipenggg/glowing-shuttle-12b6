@@ -28,7 +28,7 @@ namespace web.Controllers
             List<ApplicationUser> users;
             if (string.IsNullOrEmpty(count))
             {
-                users = await _repository.GetApplicationUserPurchasedLastMonth(User.Identity.Name, false);
+                users = await _repository.GetApplicationUserPurchasedLastMonth(User.Identity.Name);
             }
             else
             {

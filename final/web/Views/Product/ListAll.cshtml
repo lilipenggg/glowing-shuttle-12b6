@@ -1,0 +1,65 @@
+﻿@model List<web.Models.ProductModel>
+
+<div class="container-fluid">
+    <table class="table table-responsive table-hover">
+        <thead>
+            <tr>
+                <th scope="row">
+                    Product Id
+                </th>
+                <th scope="row">
+                    Name
+                </th>
+                <th scope="row">
+                    Category
+                </th>
+                <th scope="row">
+                    Description
+                </th>
+                <th scope="row">
+                    Quantity
+                </th>
+                <th scope="row">
+                    Unit Price
+                </th>
+                <th scope="row">
+                    Expiration Date
+                </th>
+                <th scope="row">
+                    Image
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductCategory.CategoryName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductQuantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductUnitPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductExpirationDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => product.ProductImage)
+                    </td>
+                </tr>    
+            }
+        </tbody>
+    </table>
+</div>

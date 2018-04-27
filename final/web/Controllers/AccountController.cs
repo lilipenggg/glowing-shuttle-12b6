@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using web.Data.Entities;
+using web.Enums;
 using web.Models;
 using web.Services;
 
@@ -196,27 +197,85 @@ namespace web.Controllers
             return View(applicationUserModel);
         }
         
-        // TODO: Need to create one action that return a overview of the list of registered users
-        /*
+        /// <summary>
+        /// Return a list of all the application users to the admin management page
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> List()
         {
-            return View();
+            if (!User.IsInRole(RoleType.Employee.Value))
+            {
+                return NotFound();
+            }
+            
+            var userModels = (await _repository.GetApplicationUsers()).Select(u => new ApplicationUserModel
+            {
+                ApplicatinUserUserName = u.UserName,
+                ApplicationUserEmail = u.ApplicationUserEmail,
+                ApplicationUserAwardPoints = u.ApplicationUserAwardPoints,
+                ApplicationUserFirstName = u.ApplicationUserFirstName,
+                ApplicationUserLastName = u.ApplicationUserLastName,
+                ApplicationUserPhoneNumber = u.ApplicationUserPhoneNumber
+            }).ToList();
+            
+            return View(userModels);
         }
         
-        // TODO: Need to create one action HttpGet that return a Create User view
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            return View();
+            var roles = await _repository.GetAllRoles();
+            var model = new RegisterViewModel
+            {
+                ApplicationUser = new ApplicationUserModel(),
+                UserRoleModels = roles
+                    .Select(r => new UserRoleModel
+                    {
+                        UserRoleId = r.Id,
+                        UserRoleName = r.Name
+                    })
+                    .OrderBy(r => r.UserRoleName)
+                    .ToList()
+            };
+            
+            return View(model);
         }
         
-        // TODO: Need to create one action HttpPost that can process the creation of a user
-        // Might be able to reuse the database query that register a new user for this action
         [HttpPost]
         public async Task<IActionResult> Create(RegisterViewModel registerViewModel)
         {
-            return View();
+            var applicationUserModel = registerViewModel.ApplicationUser;
+            
+            if (ModelState.IsValid)
+            {
+                var user = new Data.Entities.ApplicationUser()
+                {
+                    UserName = applicationUserModel.ApplicatinUserUserName,
+                    ApplicationUserAwardPoints = 0,
+                    ApplicationUserEmail = applicationUserModel.ApplicationUserEmail,
+                    ApplicationUserFirstName = applicationUserModel.ApplicationUserFirstName,
+                    ApplicationUserLastName = applicationUserModel.ApplicationUserLastName,
+                    ApplicationUserPhoneNumber = applicationUserModel.ApplicationUserPhoneNumber,
+                    Email = applicationUserModel.ApplicationUserEmail
+                };
+
+                var result = await _userManager.CreateAsync(user, applicationUserModel.ApplicationUserPassword);
+
+                if (result.Succeeded)
+                {
+                    // Assign the selected role the new user
+                    result = await _userManager.AddToRoleAsync(user,
+                        applicationUserModel.ApplicationUserRole.UserRoleName);
+                    
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+            }
+
+            return View(registerViewModel);
         }
-        */
+        
     }
 }

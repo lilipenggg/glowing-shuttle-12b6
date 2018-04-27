@@ -6,14 +6,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 namespace web.Models
 {
     public class ApplicationUserModel
-    {
-        /*
-        public ApplicationUserModel()
-        {
-            Order = new HashSet<OrderModel>();
-            Product = new HashSet<ProductModel>();
-        }*/
-        
+    {   
         [Required]
         [Display(Name = "User Name")]
         public string ApplicatinUserUserName { get; set; }
@@ -48,17 +41,8 @@ namespace web.Models
         
         public int? ApplicationUserAwardPoints { get; set; }
         
-        /*
-        public string ApplicationUserCreditCardId { get; set; }
-
-        public CreditCardModel ApplicationUserCreditCard { get; set; }*/
-        
         [Required]
         [Display(Name = "User Type")]
         public UserRoleModel ApplicationUserRole { get; set; }
-        
-        /*
-        public ICollection<OrderModel> Order { get; set; }
-        public ICollection<ProductModel> Product { get; set; }*/
     }
 }

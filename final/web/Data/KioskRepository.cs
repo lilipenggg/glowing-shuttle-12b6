@@ -39,7 +39,7 @@ namespace web.Data
         
         public async Task<List<Product>> GetProducts()
         {
-            return await _ctx.Product.OrderBy(p => p.ProductName).ToListAsync();
+            return await _ctx.Product.Include(p => p.ProductCategory).OrderBy(p => p.ProductName).ToListAsync();
         }
 
         public async Task<Product> GetProductById(string productId)
@@ -268,6 +268,11 @@ namespace web.Data
 
         #region ApplicationUser
 
+        public async Task<List<ApplicationUser>> GetApplicationUsers()
+        {
+            return await _userManager.Users.OrderBy(u => u.Id).ToListAsync();
+        }
+
         public async Task<List<ApplicationUser>> GetApplicationUserByRole(string role)
         {
             var result = await _userManager.GetUsersInRoleAsync(role);
@@ -297,7 +302,7 @@ namespace web.Data
         /// <param name="vendorUserName">Vendor's username</param>
         /// <param name="distinct">Return a list of distinct customers if true, otherwise not distinct</param>
         /// <returns></returns>
-        public async Task<List<ApplicationUser>> GetApplicationUserPurchasedLastMonth(string vendorUserName, bool distinct)
+        public async Task<List<ApplicationUser>> GetApplicationUserPurchasedLastMonth(string vendorUserName)
         {
             // Retrieve the vendor user id
             var vendorUser = await GetApplicationUserByUserName(vendorUserName);
@@ -312,22 +317,7 @@ namespace web.Data
             var lastDayLastMonth = startDayOfThisMonth.AddDays(-1);
             
             // Perform inner join to find out customers that have bought a vendor's product within the last month
-            List<ApplicationUser> customers;
-            if (!distinct)
-            {
-                customers = (from p in products
-                        join oi in orderItems on p.ProductId equals oi.OrderItemProductId
-                        join o in orders on oi.OrderItemOrderId equals o.OrderId
-                        join u in users on o.OrderCustomerId equals u.Id
-                        where p.ProductVendorId == vendorUser.Id &&
-                              o.OrderDateTime >= firstDayLastMonth &&
-                              o.OrderDateTime <= lastDayLastMonth
-                        select u)
-                    .ToList();
-            }
-            else
-            {
-                customers = (from p in products
+            var customers = (from p in products
                         join oi in orderItems on p.ProductId equals oi.OrderItemProductId
                         join o in orders on oi.OrderItemOrderId equals o.OrderId
                         join u in users on o.OrderCustomerId equals u.Id
@@ -337,7 +327,6 @@ namespace web.Data
                         select u)
                     .Distinct()
                     .ToList();
-            }
 
             return customers;
         }
@@ -350,8 +339,31 @@ namespace web.Data
         /// <returns></returns>
         public async Task<List<ApplicationUser>> GetApplicationUserPurchasedNumOfTimes(string vendorUserName, int count)
         {
-            var users = await GetApplicationUserPurchasedLastMonth(vendorUserName, false);
-            var customerCount = users.GroupBy(u => u.Id)
+            // Retrieve the vendor user id
+            var vendorUser = await GetApplicationUserByUserName(vendorUserName);
+
+            var products = await GetProducts();
+            var orderItems = await GetOrderItems();
+            var orders = await GetOrders();
+            var users = await GetApplicationUserByRole(RoleType.Customer.Value);
+
+            var startDayOfThisMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            var firstDayLastMonth = startDayOfThisMonth.AddMonths(-1);
+            var lastDayLastMonth = startDayOfThisMonth.AddDays(-1);
+            
+            // Perform inner join to find out customers that have bought a vendor's product within the last month
+            var customerOrders = (from p in products
+                        join oi in orderItems on p.ProductId equals oi.OrderItemProductId
+                        join o in orders on oi.OrderItemOrderId equals o.OrderId
+                        join u in users on o.OrderCustomerId equals u.Id
+                        where p.ProductVendorId == vendorUser.Id &&
+                              o.OrderDateTime >= firstDayLastMonth &&
+                              o.OrderDateTime <= lastDayLastMonth
+                        select new {u.Id, oi.OrderItemId})
+                    .ToList();
+            
+            
+            var customerCount = customerOrders.GroupBy(u => u.Id)
                 .Select(u => new
                 {
                     UserId = u.Key,

@@ -1,0 +1,56 @@
+﻿@model List<web.Models.ApplicationUserModel>
+
+<div class="container-fluid">
+    <p>
+        <a asp-controller="Account" asp-action="Create"><button class="btn btn-default">Create New User</button></a>
+    </p>
+    <table class="table table-responsive table-hover">
+        <thead>
+            <tr>
+                <th scope="row">
+                    Username
+                </th>
+                <th scope="row">
+                    First Name
+                </th>
+                <th scope="row">
+                    Last Name
+                </th>
+                <th scope="row">
+                    Email
+                </th>
+                <th scope="row">
+                    Phone Number
+                </th>
+                <th scope="row">
+                    Award Points
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(u => user.ApplicatinUserUserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(u => user.ApplicationUserFirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(u => user.ApplicationUserLastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(u => user.ApplicationUserEmail)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(u => user.ApplicationUserPhoneNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(u => user.ApplicationUserAwardPoints)
+                    </td>
+                </tr>    
+            }
+        </tbody>
+    </table>
+</div>

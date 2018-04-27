@@ -285,5 +285,32 @@ namespace web.Controllers
             return View(productModel);
         }
 
+        [Authorize]
+        public async Task<IActionResult> ListAll()
+        {
+            if (!User.IsInRole(RoleType.Employee.Value))
+            {
+                return NotFound();
+            }
+
+            var productModels = (await _repository.GetProducts()).Select(p => new ProductModel
+            {
+                ProductId = p.ProductId,
+                ProductCategory = new CategoryModel
+                {
+                    CategoryId = p.ProductCategory.CategoryId,
+                    CategoryName = p.ProductCategory.CategoryName
+                },
+                ProductDescription = p.ProductDescription,
+                ProductName = p.ProductName,
+                ProductQuantity = p.ProductQuantity,
+                ProductUnitPrice = p.ProductUnitPrice,
+                ProductExpirationDate = p.ProductExpirationDate,
+                ProductImage = p.ProductImage
+            }).ToList();
+
+            return View(productModels);
+        }
+
     }
 }

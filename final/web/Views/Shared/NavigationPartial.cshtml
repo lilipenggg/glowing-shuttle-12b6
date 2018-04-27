@@ -21,7 +21,7 @@
             }
             else if (User.IsInRole(RoleType.Employee.Value))
             {
-                
+                @await Html.PartialAsync("AdminManagementPartial")
             }
         }
         else

@@ -1,0 +1,47 @@
+﻿@model List<web.Models.OrderModel>
+
+<div class="container-fluid">
+    <table class="table table-responsive table-hover">
+        <thead>
+            <tr>
+                <th scope="row">
+                    Order Id
+                </th>
+                <th scope="row">
+                    Applied Award Points
+                </th>
+                <th scope="row">
+                    Applied Discount
+                </th>
+                <th scope="row">
+                    Date Time
+                </th>
+                <th scope="row">
+                    Total
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(o => order.OrderId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(o => order.OrderAppliedAwardPoints)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(o => order.OrderAppliedDiscount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(o => order.OrderDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(o => order.OrderTotal)
+                    </td>
+                </tr>    
+            }
+        </tbody>
+    </table>
+</div>
