@@ -19,7 +19,10 @@ namespace web.Controllers
             _shoppingCart = shoppingCart;
         }
         
-        // GET
+        /// <summary>
+        /// Return a view of a list of cart items that is currently in the shopping cart
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             var items = await _shoppingCart.GetShoppingCartItems();
@@ -35,6 +38,11 @@ namespace web.Controllers
             return View(shoppingCartViewModel);
         }
         
+        /// <summary>
+        /// Provides the functionality to add a product item into a shopping cart
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         public async Task<RedirectToActionResult> AddToShoppingCart(string productId)
         {
             var selectedProduct = await _repository.GetProductById(productId);

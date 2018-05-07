@@ -25,12 +25,21 @@ namespace web.Controllers
             _shoppingCart = shoppingCart;
         }
         
-        // GET
+        /// <summary>
+        /// Return a view of checking out
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Checkout()
         {
             return View();
         }
 
+        /// <summary>
+        /// Process and validate the checkout information provided,
+        /// if valid, then create a new order associated with order items and vendor
+        /// </summary>
+        /// <param name="orderModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Checkout(OrderModel orderModel)
         {
@@ -56,6 +65,10 @@ namespace web.Controllers
             return View(orderModel);
         }
 
+        /// <summary>
+        /// Return a information view that tells the user that the order has been placed
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> CheckoutComplete()
         {
             ViewBag.CheckoutCompleteMessage = "Thanks for your order. Your order will be processed shortly!";

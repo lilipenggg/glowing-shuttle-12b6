@@ -20,6 +20,10 @@ namespace web.Controllers
             _repository = repository;
         }
         
+        /// <summary>
+        /// Return a view of list of all the products
+        /// </summary>
+        /// <returns></returns>
         [Route("home/index")]
         public async Task<IActionResult> Index()
         {
@@ -40,18 +44,32 @@ namespace web.Controllers
             return View(productModels);
         }
 
+        /// <summary>
+        /// Return the view of about page
+        /// </summary>
+        /// <returns></returns>
         [Route("home/about")]
         public async Task<IActionResult> About()
         {
             return View();
         }
 
+        /// <summary>
+        /// Return the view of contact page
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("contact")]
         public async Task<IActionResult> Contact()
         {
             return View();
         }
         
+        /// <summary>
+        /// Process and validate the information user provided,
+        /// if valid, then send the email to Kiosk Fair organization
+        /// </summary>
+        /// <param name="contactViewModel"></param>
+        /// <returns></returns>
         [HttpPost("contact")]
         public async Task<IActionResult> Contact(ContactViewModel contactViewModel)
         {

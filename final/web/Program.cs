@@ -25,7 +25,6 @@ namespace web
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration(SetupConfiguration)
-                .UseUrls("https://*:5000")
                 .UseStartup<Startup>()
                 .Build();
 

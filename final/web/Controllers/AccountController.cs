@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using web.ViewModels;
-using Microsoft.AspNetCore.Authorization;
-using web.Data.Entities;
 using web.Enums;
 using web.Models;
 using web.Services;
@@ -30,6 +25,11 @@ namespace web.Controllers
             _repository = repository;
         }
 
+        /// <summary>
+        /// Return a view for user to login
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         public IActionResult Login(string returnUrl)
         {
@@ -39,6 +39,11 @@ namespace web.Controllers
             });
         }
 
+        /// <summary>
+        /// Allow user to login to the applcation based on the entered username and password
+        /// </summary>
+        /// <param name="loginViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
@@ -64,6 +69,12 @@ namespace web.Controllers
             return View(loginViewModel);
         }
         
+        /// <summary>
+        /// LoginRedirect is called when customer selects to sign in before checkout
+        /// and it will return a view for user to enter login information
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         public IActionResult LoginRedirect(string returnUrl)
         {
@@ -73,6 +84,11 @@ namespace web.Controllers
             });
         }
 
+        /// <summary>
+        /// Process the login information and redirect user back to shopping cart checkout page
+        /// </summary>
+        /// <param name="loginViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> LoginRedirect(LoginViewModel loginViewModel)
@@ -99,6 +115,10 @@ namespace web.Controllers
             return View(loginViewModel);
         }
 
+        /// <summary>
+        /// Return a view for user to enter registration information
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         public async Task<IActionResult> Register()
         {   
@@ -120,6 +140,12 @@ namespace web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Process and validate the registration information that user filled out,
+        /// if all the information is valid, it will create a new user in the system
+        /// </summary>
+        /// <param name="registerViewModel"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
@@ -157,6 +183,10 @@ namespace web.Controllers
             return View(registerViewModel);
         }
 
+        /// <summary>
+        /// Allow user to logout from the system
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
@@ -164,6 +194,11 @@ namespace web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        /// <summary>
+        /// Return a view of the user's information that he/she can edit
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Edit(string userName)
         {
@@ -180,6 +215,13 @@ namespace web.Controllers
             return View(userModel);
         }
 
+        /// <summary>
+        /// Process and validate the information that user filled out to udpate their own information
+        /// if all is valid, update the current user's info within the database
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="applicationUserModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Edit(string userName, ApplicationUserModel applicationUserModel)
         {
@@ -221,6 +263,10 @@ namespace web.Controllers
             return View(userModels);
         }
         
+        /// <summary>
+        /// Return a view for admin to create a new user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -241,6 +287,12 @@ namespace web.Controllers
             return View(model);
         }
         
+        /// <summary>
+        /// Process and validate the information that admin provides
+        /// if information is valid, then create a new user in the system
+        /// </summary>
+        /// <param name="registerViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Create(RegisterViewModel registerViewModel)
         {

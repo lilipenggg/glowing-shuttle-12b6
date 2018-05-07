@@ -39,6 +39,12 @@ namespace web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Process and validate the information user provided
+        /// if valid, create a email and send it to the recipient
+        /// </summary>
+        /// <param name="emailViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Create(EmailViewModel emailViewModel)
         {

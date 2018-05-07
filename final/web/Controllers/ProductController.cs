@@ -226,6 +226,11 @@ namespace web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// Return a view of the list of all the products 
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
         public async Task<ViewResult> List(string category)
         {
             var model = new ProductListViewModel();
@@ -258,6 +263,11 @@ namespace web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Return a partial view that contains the detail information about a product
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Details(string productId)
         {
             var product = await _repository.GetProductById(productId);
@@ -285,6 +295,10 @@ namespace web.Controllers
             return View(productModel);
         }
 
+        /// <summary>
+        /// Return a view where admin can see all the orders that have been placed
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         public async Task<IActionResult> ListAll()
         {

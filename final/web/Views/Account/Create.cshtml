@@ -1,7 +1,8 @@
 ﻿@model RegisterViewModel
-{
+@{
     ViewBag.Title = "Create New User";
 }
+
 <form asp-controller="Account" asp-action="Register" method="post" class="form-horizontal" role="form">
 
     <div asp-validation-summary="All" class="text-danger"></div>

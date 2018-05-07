@@ -65,11 +65,12 @@ namespace web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseStatusCodePages();
             }
             else
             {
                 // Catch error and show the user a friendly error page
-                app.UseExceptionHandler("/error");
+                app.UseExceptionHandler("/AppException");
             }
             
             app.UseSession();

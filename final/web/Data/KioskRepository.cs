@@ -37,16 +37,30 @@ namespace web.Data
 
         #region Product
         
+        /// <summary>
+        /// Query the database and retrieve a list of all the orders in the system
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<Product>> GetProducts()
         {
             return await _ctx.Product.Include(p => p.ProductCategory).OrderBy(p => p.ProductName).ToListAsync();
         }
 
+        /// <summary>
+        /// Query the database and retrieve a specific order based on the provided product id
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         public async Task<Product> GetProductById(string productId)
         {
             return await _ctx.Product.Include(p => p.ProductCategory).SingleOrDefaultAsync(p => p.ProductId == productId);
         }
 
+        /// <summary>
+        /// Query the database and retrieve a specific order based on the provided product category
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
         public async Task<List<Product>> GetProductByCategory(string category)
         {
             return await (from p in _ctx.Product
@@ -56,6 +70,11 @@ namespace web.Data
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Query the database and retrieve a specific order based on the provided vendor user id
+        /// </summary>
+        /// <param name="vendorId"></param>
+        /// <returns></returns>
         public async Task<List<Product>> GetProductByVendorId(string vendorId)
         {
             return await (from p in _ctx.Product
@@ -64,12 +83,23 @@ namespace web.Data
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Query the database and retrieve a specific order based on the provided vendor username
+        /// </summary>
+        /// <param name="vendorName"></param>
+        /// <returns></returns>
         public async Task<List<Product>> GetProductByVendorName(string vendorName)
         {
             var applicationUser = await GetApplicationUserByUserName(vendorName);
             return await _ctx.Product.Where(p => p.ProductVendorId == applicationUser.Id).Include(p => p.ProductCategory).ToListAsync();
         }
 
+        /// <summary>
+        /// Create a new product in the system and associated it with the current logged in customer user
+        /// </summary>
+        /// <param name="productModel"></param>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         public async Task CreateProduct(ProductModel productModel, string userName)
         {
             var applicationUser = await GetApplicationUserByUserName(userName);
@@ -88,6 +118,12 @@ namespace web.Data
             await _ctx.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Update a existing product in the system 
+        /// </summary>
+        /// <param name="productModel"></param>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         public async Task UpdateProduct(ProductModel productModel, string userName)
         {   
             var applicationUser = await GetApplicationUserByUserName(userName);
@@ -107,6 +143,11 @@ namespace web.Data
             await _ctx.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Delete a specific product from the system based on the provided product id
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         public async Task DeleteProduct(string productId)
         {
             var product = await GetProductById(productId);
@@ -118,16 +159,30 @@ namespace web.Data
 
         #region Category
 
+        /// <summary>
+        /// Retrieve a list of all the categories from the system
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<Category>> GetCategories()
         {
             return await _ctx.Category.OrderBy(c => c.CategoryName).ToListAsync();
         }
 
+        /// <summary>
+        /// Get a specific category based on the provided category id
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
         public async Task<Category> GetCategoryById(string categoryId)
         {
             return await _ctx.Category.SingleOrDefaultAsync(c => c.CategoryId == categoryId);
         }
 
+        /// <summary>
+        /// Get a specific category based on the provided category name
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
         public async Task<Category> GetCategoryByName(string categoryName)
         {
             return await _ctx.Category.SingleOrDefaultAsync(c => c.CategoryName == categoryName);
@@ -137,6 +192,11 @@ namespace web.Data
         
         #region ShoppingCartItem
 
+        /// <summary>
+        /// Get all the current shopping cart items from the system
+        /// </summary>
+        /// <param name="cartId"></param>
+        /// <returns></returns>
         public async Task<List<ShoppingCartItem>> GetShoppingCartItems(string cartId)
         {
             return await (from s in _ctx.ShoppingCartItem
@@ -148,16 +208,31 @@ namespace web.Data
         
         #region OrderItem
 
+        /// <summary>
+        /// Get a list of all the order items in the system
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<OrderItem>> GetOrderItems()
         {
             return await _ctx.OrderItem.OrderBy(oi => oi.OrderItemId).ToListAsync();
         }
 
+        /// <summary>
+        /// Get a list of order items that is included within the same order 
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public async Task<List<OrderItem>> GetOrderItemsById(string orderId)
         {
             return await _ctx.OrderItem.Include(oi => oi.OrderItemOrderId == orderId).ToListAsync();
         }
 
+        /// <summary>
+        /// Create order items in the system based on the provided shopping cart items and order
+        /// </summary>
+        /// <param name="shoppingCartItems"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
         public async Task CreateOrderItems(List<ShoppingCartItem> shoppingCartItems, Order order)
         {
             List<OrderItem> orderItems = new List<OrderItem>();
@@ -182,6 +257,10 @@ namespace web.Data
 
         #region Order
         
+        /// <summary>
+        /// Get a list of all the orders in the system
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<Order>> GetOrders()
         {
             return await (from o in _ctx.Order
@@ -189,11 +268,25 @@ namespace web.Data
                 select o).ToListAsync();
         }
 
+        /// <summary>
+        /// Get a specific order based on the provided order id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<Order> GetOrderById(string id)
         {
             return await _ctx.Order.Include(o => o.OrderItem).SingleOrDefaultAsync(o => o.OrderId == id);
         }
 
+        /// <summary>
+        /// Create a new order in the system based ono the shopping cart items
+        /// Recalculate the total based on the provided award points
+        /// Update the current user with their latest award points
+        /// </summary>
+        /// <param name="orderModel"></param>
+        /// <param name="shoppingCartItems"></param>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         public async Task CreateOrder(OrderModel orderModel, List<ShoppingCartItem> shoppingCartItems, string userName)
         {   
             // create credit card entry
@@ -268,27 +361,52 @@ namespace web.Data
 
         #region ApplicationUser
 
+        /// <summary>
+        /// Get a list of all the application users in the system
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<ApplicationUser>> GetApplicationUsers()
         {
             return await _userManager.Users.OrderBy(u => u.Id).ToListAsync();
         }
 
+        /// <summary>
+        /// Get a list of application users based on their role type
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
         public async Task<List<ApplicationUser>> GetApplicationUserByRole(string role)
         {
             var result = await _userManager.GetUsersInRoleAsync(role);
             return new List<ApplicationUser>(result);
         }
 
+        /// <summary>
+        /// Get a application user based on the provided email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         public async Task<ApplicationUser> GetApplicationUserByEmail(string email)
         {
             return await _ctx.ApplicationUser.SingleOrDefaultAsync(a => a.ApplicationUserEmail == email);
         }
 
+        /// <summary>
+        /// Get a specific application user based on their user name
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         public async Task<ApplicationUser> GetApplicationUserByUserName(string userName)
         {
             return await _ctx.ApplicationUser.SingleOrDefaultAsync(a => a.UserName == userName);
         }
         
+        /// <summary>
+        /// Update a specific application user's award points
+        /// </summary>
+        /// <param name="awardPoints"></param>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         public async Task UpdateApplicationUserAwardPoints(int? awardPoints, string userName)
         {
             var user = await GetApplicationUserByUserName(userName);
@@ -385,16 +503,35 @@ namespace web.Data
 
         #region CreditCard
 
+        /// <summary>
+        /// Get a specific credit card by the provided id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<CreditCard> GetCreditCardById(string id)
         {
             return await _ctx.CreditCard.SingleOrDefaultAsync(c => c.CreditCardId == id);
         }
 
+        /// <summary>
+        /// Get a specific credit card by the provided card number
+        /// </summary>
+        /// <param name="cardNumber"></param>
+        /// <returns></returns>
         public async Task<CreditCard> GetCreditCardByCardNumber(string cardNumber)
         {
             return await _ctx.CreditCard.SingleOrDefaultAsync(c => c.CreditCardNumber == cardNumber);
         }
 
+        /// <summary>
+        /// Create a new credit card in the system
+        /// </summary>
+        /// <param name="cvv"></param>
+        /// <param name="expirationDate"></param>
+        /// <param name="firstName"></param>
+        /// <param name="lastName"></param>
+        /// <param name="cardNumber"></param>
+        /// <returns></returns>
         public async Task<CreditCard> CreateCreditCard(int cvv, DateTime expirationDate, string firstName, string lastName, string cardNumber)
         {
             CreditCard creditCard = new CreditCard
@@ -415,6 +552,10 @@ namespace web.Data
 
         #region IdentityRole
 
+        /// <summary>
+        /// Get a list of all the roles in the system
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<IdentityRole>> GetAllRoles()
         {
             return await _roleManager.Roles.OrderBy(r => r.Name).ToListAsync();
